@@ -1,0 +1,94 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Stock Market Dashboard</title>
+    <link rel="stylesheet" href="style.css">
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600&display=swap" rel="stylesheet">
+</head>
+
+<body>
+    <header>
+        <div class="container header-content">
+            <h1>Market<span class="highlight">Dash</span></h1>
+            <p>Live Indian Stock Market Data</p>
+        </div>
+    </header>
+
+    <main class="container">
+        <!-- Stats Row -->
+        <section class="stats-grid" id="globalStats">
+            <!-- Populated by JS -->
+        </section>
+
+        <!-- Chart Section -->
+        <section class="chart-section">
+            <div class="charts-grid-layout">
+                <div class="card">
+                    <h2>Top Companies by Market Cap</h2>
+                    <div class="chart-container">
+                        <canvas id="marketCapChart"></canvas>
+                    </div>
+                </div>
+                <div class="card">
+                    <h2>ROE vs P/E Ratio</h2>
+                    <div class="chart-container">
+                        <canvas id="roePeChart"></canvas>
+                    </div>
+                </div>
+                <div class="card">
+                    <h2>Dividend Yield Distribution</h2>
+                    <div class="chart-container">
+                        <canvas id="dividendChart"></canvas>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Controls & Table -->
+        <section class="data-section">
+            <div class="controls">
+                <input type="text" id="searchInput" placeholder="Search stocks (e.g., RELIANCE)...">
+                <select id="sortSelect">
+                    <option value="marketCapDesc">Market Cap (High to Low)</option>
+                    <option value="marketCapAsc">Market Cap (Low to High)</option>
+                    <option value="priceDesc">Price (High to Low)</option>
+                    <option value="priceAsc">Price (Low to High)</option>
+                </select>
+            </div>
+
+            <div class="card table-card">
+                <div class="table-responsive">
+                    <table id="stockTable">
+                        <thead>
+                            <tr>
+                                <th>Symbol</th>
+                                <th>Name</th>
+                                <th class="text-right">Price</th>
+                                <th class="text-right">Market Cap</th>
+                                <th class="text-right">P/E</th>
+                                <th class="text-right">Div Yield</th>
+                                <th class="text-right">High/Low</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <!-- Rows populated by JS -->
+                        </tbody>
+                    </table>
+                </div>
+                <!-- Pagination could go here -->
+            </div>
+        </section>
+    </main>
+
+    <footer>
+        <p>Data provided by FreeAPI.app details are for educational purposes.</p>
+    </footer>
+
+    <script src="script.js"></script>
+</body>
+
+</html>

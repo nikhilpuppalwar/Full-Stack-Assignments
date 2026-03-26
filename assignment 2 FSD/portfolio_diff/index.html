@@ -1,0 +1,504 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Nikhil Puppalwar - Portfolio</title>
+    <link rel="stylesheet" href="styles.css">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap"
+        rel="stylesheet">
+</head>
+
+<body>
+    <!-- Navigation -->
+    <nav class="navbar">
+        <div class="nav-container">
+            <div class="logo">Nikhil Puppalwar</div>
+            <ul class="nav-menu">
+                <li><a href="#home" class="nav-link">Home</a></li>
+                <li><a href="#about" class="nav-link">About</a></li>
+                <li><a href="#skills" class="nav-link">Skills</a></li>
+                <li><a href="#experience" class="nav-link">Experience</a></li>
+                <li><a href="#projects" class="nav-link">Projects</a></li>
+                <li><a href="#contact" class="nav-link contact-btn">Contact</a></li>
+            </ul>
+            <div class="hamburger">
+                <span></span>
+                <span></span>
+                <span></span>
+            </div>
+        </div>
+    </nav>
+
+    <!-- Hero Section -->
+    <section id="home" class="hero">
+        <div class="hero-container">
+            <div class="hero-content">
+                <div class="hero-text">
+                    <p class="greeting">Hello, I'm</p>
+                    <h1 class="hero-title">Nikhil Puppalwar</h1>
+                    <p class="hero-subtitle">Android Developer & Software Engineer</p>
+                    <p class="hero-description">
+                        Pre-final year B.Tech Computer Engineering student with strong expertise in Android application
+                        development using Kotlin and Jetpack Compose. Experienced in building real-time mobile
+                        applications
+                        using Firebase Authentication and Realtime Database following MVVM architecture.
+                    </p>
+                    <div class="hero-buttons">
+                        <a href="#projects" class="btn btn-primary">View My Work</a>
+                        <a href="#contact" class="btn btn-secondary">Get In Touch</a>
+                    </div>
+                    <div class="social-links">
+                        <a href="https://github.com/nikhilpuppalwar" target="_blank" class="social-icon"
+                            aria-label="GitHub">
+                            <svg width="24" height="24" viewBox="0 0 24 24" fill="currentColor">
+                                <path
+                                    d="M12 0c-6.626 0-12 5.373-12 12 0 5.302 3.438 9.8 8.207 11.387.599.111.793-.261.793-.577v-2.234c-3.338.726-4.033-1.416-4.033-1.416-.546-1.387-1.333-1.756-1.333-1.756-1.089-.745.083-.729.083-.729 1.205.084 1.839 1.237 1.839 1.237 1.07 1.834 2.807 1.304 3.492.997.107-.775.418-1.305.762-1.604-2.665-.305-5.467-1.334-5.467-5.931 0-1.311.469-2.381 1.236-3.221-.124-.303-.535-1.524.117-3.176 0 0 1.008-.322 3.301 1.23.957-.266 1.983-.399 3.003-.404 1.02.005 2.047.138 3.006.404 2.291-1.552 3.297-1.23 3.297-1.23.653 1.653.242 2.874.118 3.176.77.84 1.235 1.911 1.235 3.221 0 4.609-2.807 5.624-5.479 5.921.43.372.823 1.102.823 2.222v3.293c0 .319.192.694.801.576 4.765-1.589 8.199-6.086 8.199-11.386 0-6.627-5.373-12-12-12z" />
+                            </svg>
+                        </a>
+                        <a href="https://linkedin.com/in/nikhil-puppalwar" target="_blank" class="social-icon"
+                            aria-label="LinkedIn">
+                            <svg width="24" height="24" viewBox="0 0 24 24" fill="currentColor">
+                                <path
+                                    d="M19 0h-14c-2.761 0-5 2.239-5 5v14c0 2.761 2.239 5 5 5h14c2.762 0 5-2.239 5-5v-14c0-2.761-2.238-5-5-5zm-11 19h-3v-11h3v11zm-1.5-12.268c-.966 0-1.75-.79-1.75-1.764s.784-1.764 1.75-1.764 1.75.79 1.75 1.764-.783 1.764-1.75 1.764zm13.5 12.268h-3v-5.604c0-3.368-4-3.113-4 0v5.604h-3v-11h3v1.765c1.396-2.586 7-2.777 7 2.476v6.759z" />
+                            </svg>
+                        </a>
+                        <a href="mailto:nikhilpuppalwar16@gmail.com" class="social-icon" aria-label="Email">
+                            <svg width="24" height="24" viewBox="0 0 24 24" fill="currentColor">
+                                <path
+                                    d="M0 3v18h24v-18h-24zm6.623 7.929l-4.623 5.712v-9.458l4.623 3.746zm-4.141-5.929h19.035l-9.517 7.713-9.518-7.713zm5.694 7.188l3.824 3.099 3.83-3.104 5.612 6.817h-18.779l5.513-6.812zm9.208-1.264l4.616-3.741v9.348l-4.616-5.607z" />
+                            </svg>
+                        </a>
+                        <a href="tel:+919370654064" class="social-icon" aria-label="Phone">
+                            <svg width="24" height="24" viewBox="0 0 24 24" fill="currentColor">
+                                <path
+                                    d="M20 22.621l-3.521-6.795c-.008.004-1.974.97-2.064 1.011-2.24 1.086-6.799-7.82-4.609-8.994l2.083-1.026-3.493-6.817-2.106 1.039c-7.202 3.755 4.233 25.982 11.6 22.615.121-.055 2.102-1.029 2.11-1.033z" />
+                            </svg>
+                        </a>
+                    </div>
+                </div>
+                <div class="hero-image">
+                    <div class="image-wrapper">
+                       
+                        <div class="profile-placeholder">
+                            <div class="gradient-ring">
+                                <img src="nikhil.jpg" alt="Nikhil">
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- About Section -->
+    <section id="about" class="about">
+        <div class="container">
+            <h2 class="section-title">About Me</h2>
+            <div class="about-content">
+                <div class="about-text">
+                    <p>
+                        I'm a pre-final year B.Tech Computer Engineering student at PCCOE - Pimpri Chinchwad College Of
+                        Engineering, Pune,
+                        with a strong passion for Android development and software engineering. My expertise lies in
+                        building scalable
+                        mobile applications using modern technologies like Kotlin, Jetpack Compose, and Firebase.
+                    </p>
+                    <p>
+                        With a solid foundation in Data Structures and Algorithms, clean architecture, and MVVM design
+                        patterns,
+                        I focus on creating efficient, maintainable, and user-friendly applications. I'm constantly
+                        learning and
+                        exploring new technologies to stay at the forefront of mobile development.
+                    </p>
+                    <div class="education-section">
+                        <h3>Education</h3>
+                        <div class="education-item">
+                            <h4>B.Tech in Computer Engineering</h4>
+                            <p class="institution">PCCOE - Pimpri Chinchwad College Of Engineering, Pune</p>
+                            <p class="duration">2023 - 2027 | CGPA: 7.42</p>
+                        </div>
+                        <div class="education-item">
+                            <h4>Higher Secondary (XII)</h4>
+                            <p class="institution">Vikas Hindi Vidyalaya, Pandharkawada</p>
+                            <p class="duration">2022 - 2023 | 71.33%</p>
+                        </div>
+                        <div class="education-item">
+                            <h4>Secondary (X) - CBSE</h4>
+                            <p class="institution">Gurukul English Medium School, Pandharkawada</p>
+                            <p class="duration">2020 - 2021 | 85.50%</p>
+                        </div>
+                    </div>
+                    <div class="about-stats">
+                        <div class="stat-item">
+                            <h3>3+</h3>
+                            <p>Major Projects</p>
+                        </div>
+                        <div class="stat-item">
+                            <h3>10+</h3>
+                            <p>Technologies</p>
+                        </div>
+                        <div class="stat-item">
+                            <h3>2</h3>
+                            <p>Internships</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Skills Section -->
+    <section id="skills" class="skills">
+        <div class="container">
+            <h2 class="section-title">Skills & Technologies</h2>
+            <div class="skills-grid">
+                <div class="skill-category">
+                    <h3>Programming Languages</h3>
+                    <div class="skill-items">
+                        <div class="skill-item">
+                            <span class="skill-name">Kotlin</span>
+                            <div class="skill-bar">
+                                <div class="skill-progress" style="width: 90%"></div>
+                            </div>
+                        </div>
+                        <div class="skill-item">
+                            <span class="skill-name">Java</span>
+                            <div class="skill-bar">
+                                <div class="skill-progress" style="width: 85%"></div>
+                            </div>
+                        </div>
+                        <div class="skill-item">
+                            <span class="skill-name">Python</span>
+                            <div class="skill-bar">
+                                <div class="skill-progress" style="width: 80%"></div>
+                            </div>
+                        </div>
+                        <div class="skill-item">
+                            <span class="skill-name">C++</span>
+                            <div class="skill-bar">
+                                <div class="skill-progress" style="width: 75%"></div>
+                            </div>
+                        </div>
+                        <div class="skill-item">
+                            <span class="skill-name">SQL</span>
+                            <div class="skill-bar">
+                                <div class="skill-progress" style="width: 80%"></div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="skill-category">
+                    <h3>Android Development</h3>
+                    <div class="skill-items">
+                        <div class="skill-item">
+                            <span class="skill-name">Jetpack Compose</span>
+                            <div class="skill-bar">
+                                <div class="skill-progress" style="width: 90%"></div>
+                            </div>
+                        </div>
+                        <div class="skill-item">
+                            <span class="skill-name">XML</span>
+                            <div class="skill-bar">
+                                <div class="skill-progress" style="width: 85%"></div>
+                            </div>
+                        </div>
+                        <div class="skill-item">
+                            <span class="skill-name">Android Studio</span>
+                            <div class="skill-bar">
+                                <div class="skill-progress" style="width: 90%"></div>
+                            </div>
+                        </div>
+                        <div class="skill-item">
+                            <span class="skill-name">MVVM Architecture</span>
+                            <div class="skill-bar">
+                                <div class="skill-progress" style="width: 85%"></div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="skill-category">
+                    <h3>Backend & Cloud</h3>
+                    <div class="skill-items">
+                        <div class="skill-item">
+                            <span class="skill-name">Firebase Authentication</span>
+                            <div class="skill-bar">
+                                <div class="skill-progress" style="width: 85%"></div>
+                            </div>
+                        </div>
+                        <div class="skill-item">
+                            <span class="skill-name">Firebase Realtime DB</span>
+                            <div class="skill-bar">
+                                <div class="skill-progress" style="width: 85%"></div>
+                            </div>
+                        </div>
+                        <div class="skill-item">
+                            <span class="skill-name">REST APIs</span>
+                            <div class="skill-bar">
+                                <div class="skill-progress" style="width: 80%"></div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="skill-category">
+                    <h3>Tools & Others</h3>
+                    <div class="skill-items">
+                        <div class="skill-item">
+                            <span class="skill-name">Git & GitHub</span>
+                            <div class="skill-bar">
+                                <div class="skill-progress" style="width: 85%"></div>
+                            </div>
+                        </div>
+                        <div class="skill-item">
+                            <span class="skill-name">Postman</span>
+                            <div class="skill-bar">
+                                <div class="skill-progress" style="width: 75%"></div>
+                            </div>
+                        </div>
+                        <div class="skill-item">
+                            <span class="skill-name">DSA & OOPs</span>
+                            <div class="skill-bar">
+                                <div class="skill-progress" style="width: 80%"></div>
+                            </div>
+                        </div>
+                        <div class="skill-item">
+                            <span class="skill-name">Data Analysis</span>
+                            <div class="skill-bar">
+                                <div class="skill-progress" style="width: 70%"></div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Experience Section -->
+    <section id="experience" class="experience">
+        <div class="container">
+            <h2 class="section-title">Experience</h2>
+            <div class="timeline">
+                <div class="timeline-item">
+                    <div class="timeline-dot"></div>
+                    <div class="timeline-content">
+                        <h3>Android Development Intern</h3>
+                        <p class="company">SpaceECE, Pune</p>
+                        <p class="duration">Aug 2025 - Nov 2025</p>
+                        <ul class="description">
+                            <li>Worked on the Android Milestone Tracker project</li>
+                            <li>Developed Android features using Kotlin and Firebase</li>
+                            <li>Collaborated in an agile environment and delivered assigned modules successfully</li>
+                        </ul>
+                    </div>
+                </div>
+                <div class="timeline-item">
+                    <div class="timeline-dot"></div>
+                    <div class="timeline-content">
+                        <h3>Infosys Springboard Internship 6.0 (B3)</h3>
+                        <p class="company">Infosys</p>
+                        <p class="duration">Sep 2025 - Nov 2025</p>
+                        <ul class="description">
+                            <li>Developed SmartQuizzer, an adaptive AI-based quiz generator</li>
+                            <li>Applied AI-driven logic to enhance personalized learning experiences</li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Projects Section -->
+    <section id="projects" class="projects">
+        <div class="container">
+            <h2 class="section-title">Featured Projects</h2>
+            <div class="projects-grid">
+                <div class="project-card">
+                    <div class="project-image">
+                        <div class="project-gradient"
+                            style="background: linear-gradient(135deg, #667eea 0%, #764ba2 100%)"></div>
+                        <div class="project-overlay">
+                            <a href="https://github.com/nikhilpuppalwar" target="_blank" class="project-link">View on
+                                GitHub</a>
+                        </div>
+                    </div>
+                    <div class="project-info">
+                        <h3>WhatsApp Clone</h3>
+                        <p>Built a real-time chat application with OTP-based phone authentication using Firebase
+                            Authentication,
+                            implemented real-time messaging with Firebase Realtime Database, and designed chat, profile,
+                            status, and
+                            call user interfaces using Jetpack Compose.</p>
+                        <div class="project-tags">
+                            <span class="tag">Kotlin</span>
+                            <span class="tag">Jetpack Compose</span>
+                            <span class="tag">Firebase</span>
+                            <span class="tag">MVVM</span>
+                            <span class="tag">Hilt</span>
+                        </div>
+                    </div>
+                </div>
+                <div class="project-card">
+                    <div class="project-image">
+                        <div class="project-gradient"
+                            style="background: linear-gradient(135deg, #f093fb 0%, #f5576c 100%)"></div>
+                        <div class="project-overlay">
+                            <a href="https://github.com/nikhilpuppalwar" target="_blank" class="project-link">View on
+                                GitHub</a>
+                        </div>
+                    </div>
+                    <div class="project-info">
+                        <h3>Agri Mart App</h3>
+                        <p>Developed a real-time agricultural marketplace Android application with secure
+                            authentication,
+                            multi-image uploads, and dynamic product listings, ensuring live data synchronization and
+                            optimized
+                            UI performance.</p>
+                        <div class="project-tags">
+                            <span class="tag">Kotlin</span>
+                            <span class="tag">Firebase Realtime DB</span>
+                            <span class="tag">Android</span>
+                        </div>
+                    </div>
+                </div>
+                <div class="project-card">
+                    <div class="project-image">
+                        <div class="project-gradient"
+                            style="background: linear-gradient(135deg, #4facfe 0%, #00f2fe 100%)"></div>
+                        <div class="project-overlay">
+                            <a href="https://github.com/nikhilpuppalwar" target="_blank" class="project-link">View on
+                                GitHub</a>
+                        </div>
+                    </div>
+                    <div class="project-info">
+                        <h3>Laundry Mart App</h3>
+                        <p>Created a laundry management Android application with login and signup functionality,
+                            enhancing user experience through animations and improved UI design.</p>
+                        <div class="project-tags">
+                            <span class="tag">Kotlin</span>
+                            <span class="tag">XML</span>
+                            <span class="tag">Firebase</span>
+                        </div>
+                    </div>
+                </div>
+                <div class="project-card">
+                    <div class="project-image">
+                        <div class="project-gradient"
+                            style="background: linear-gradient(135deg, #fa709a 0%, #fee140 100%)"></div>
+                        <div class="project-overlay">
+                            <a href="https://github.com/nikhilpuppalwar" target="_blank" class="project-link">View on
+                                GitHub</a>
+                        </div>
+                    </div>
+                    <div class="project-info">
+                        <h3>SmartQuizzer</h3>
+                        <p>An adaptive AI-based quiz generator developed during Infosys Springboard Internship.
+                            Applied AI-driven logic to enhance personalized learning experiences.</p>
+                        <div class="project-tags">
+                            <span class="tag">AI/ML</span>
+                            <span class="tag">Python</span>
+                            <span class="tag">Adaptive Learning</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Certifications Section -->
+    <section id="certifications" class="certifications">
+        <div class="container">
+            <h2 class="section-title">Certifications</h2>
+            <div class="cert-grid">
+                <div class="cert-card">
+                    <div class="cert-icon">📜</div>
+                    <h3>Basics of Python</h3>
+                    <p>Coding Ninjas</p>
+                </div>
+                <div class="cert-card">
+                    <div class="cert-icon">💻</div>
+                    <h3>Programming in Modern C++</h3>
+                    <p>NPTEL</p>
+                </div>
+                <div class="cert-card">
+                    <div class="cert-icon">🗄️</div>
+                    <h3>Introduction to SQL</h3>
+                    <p>Simplilearn</p>
+                </div>
+                <div class="cert-card">
+                    <div class="cert-icon">🤖</div>
+                    <h3>Introduction to Deep Learning</h3>
+                    <p>Infosys Springboard</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Contact Section -->
+    <section id="contact" class="contact">
+        <div class="container">
+            <h2 class="section-title">Get In Touch</h2>
+            <div class="contact-content">
+                <div class="contact-info">
+                    <p class="contact-description">
+                        I'm actively seeking Android Developer / Software Engineering internship opportunities.
+                        Let's connect and discuss how I can contribute to your team!
+                    </p>
+                    <div class="contact-details">
+                        <div class="contact-item">
+                            <svg width="24" height="24" viewBox="0 0 24 24" fill="currentColor">
+                                <path
+                                    d="M0 3v18h24v-18h-24zm6.623 7.929l-4.623 5.712v-9.458l4.623 3.746zm-4.141-5.929h19.035l-9.517 7.713-9.518-7.713zm5.694 7.188l3.824 3.099 3.83-3.104 5.612 6.817h-18.779l5.513-6.812zm9.208-1.264l4.616-3.741v9.348l-4.616-5.607z" />
+                            </svg>
+                            <a href="mailto:nikhilpuppalwar16@gmail.com">nikhilpuppalwar16@gmail.com</a>
+                        </div>
+                        <div class="contact-item">
+                            <svg width="24" height="24" viewBox="0 0 24 24" fill="currentColor">
+                                <path
+                                    d="M20 22.621l-3.521-6.795c-.008.004-1.974.97-2.064 1.011-2.24 1.086-6.799-7.82-4.609-8.994l2.083-1.026-3.493-6.817-2.106 1.039c-7.202 3.755 4.233 25.982 11.6 22.615.121-.055 2.102-1.029 2.11-1.033z" />
+                            </svg>
+                            <a href="tel:+919370654064">+91 9370654064</a>
+                        </div>
+                        <div class="contact-item">
+                            <svg width="24" height="24" viewBox="0 0 24 24" fill="currentColor">
+                                <path
+                                    d="M12 0c-4.198 0-8 3.403-8 7.602 0 4.198 3.469 9.21 8 16.398 4.531-7.188 8-12.2 8-16.398 0-4.199-3.801-7.602-8-7.602zm0 11c-1.657 0-3-1.343-3-3s1.343-3 3-3 3 1.343 3 3-1.343 3-3 3z" />
+                            </svg>
+                            <span>Pune, Maharashtra</span>
+                        </div>
+                    </div>
+                </div>
+                <form class="contact-form" id="contactForm">
+                    <div class="form-group">
+                        <input type="text" id="name" name="name" placeholder="Your Name" required>
+                    </div>
+                    <div class="form-group">
+                        <input type="email" id="email" name="email" placeholder="Your Email" required>
+                    </div>
+                    <div class="form-group">
+                        <textarea id="message" name="message" rows="5" placeholder="Your Message" required></textarea>
+                    </div>
+                    <button type="submit" class="btn btn-primary">Send Message</button>
+                </form>
+            </div>
+        </div>
+    </section>
+
+    <!-- Footer -->
+    <footer class="footer">
+        <div class="container">
+            <p>&copy; 2026 Nikhil Puppalwar. All rights reserved.</p>
+            <div class="footer-links">
+                <a href="https://github.com/nikhilpuppalwar" target="_blank">GitHub</a>
+                <a href="https://linkedin.com/in/nikhil-puppalwar" target="_blank">LinkedIn</a>
+                <a href="mailto:nikhilpuppalwar16@gmail.com">Email</a>
+            </div>
+        </div>
+    </footer>
+
+    <script src="script.js"></script>
+</body>
+
+</html>

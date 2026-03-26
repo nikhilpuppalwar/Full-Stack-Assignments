@@ -1,0 +1,194 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>All Products - Electronics Store</title>
+    <!-- Bootstrap CSS -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <!-- Font Awesome -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <!-- Google Fonts -->
+    <link href="https://fonts.googleapis.com/css2?family=Open+Sans:wght@400;600&family=Roboto:wght@500;700&display=swap"
+        rel="stylesheet">
+    <!-- Custom CSS -->
+    <link rel="stylesheet" href="../css/styles.css">
+</head>
+
+<body>
+
+    <!-- Navigation -->
+    <nav class="navbar navbar-expand-lg navbar-dark bg-primary sticky-top">
+        <div class="container">
+            <a class="navbar-brand" href="../index.html">
+                <img src="../images/Logo.png" alt="ElectroStore" class="d-inline-block align-text-top me-2"
+                    style="border-radius: 4px; background: white; padding: 2px;">
+                ElectroStore
+            </a>
+            <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav">
+                <span class="navbar-toggler-icon"></span>
+            </button>
+            <div class="collapse navbar-collapse" id="navbarNav">
+                <ul class="navbar-nav me-auto">
+                    <li class="nav-item"><a class="nav-link" href="../index.html">Home</a></li>
+                    <li class="nav-item"><a class="nav-link active" href="products.html">All Products</a></li>
+                    <li class="nav-item dropdown">
+                        <a class="nav-link dropdown-toggle" href="#" role="button"
+                            data-bs-toggle="dropdown">Categories</a>
+                        <ul class="dropdown-menu">
+                            <li><a class="dropdown-item" href="products.html?category=smartphones">Smartphones</a></li>
+                            <li><a class="dropdown-item" href="products.html?category=laptops">Laptops</a></li>
+                            <li><a class="dropdown-item" href="products.html?category=audio">Audio</a></li>
+                            <li><a class="dropdown-item" href="products.html?category=cameras">Cameras</a></li>
+                            <li><a class="dropdown-item" href="products.html?category=gaming">Gaming</a></li>
+                        </ul>
+                    </li>
+                </ul>
+                <div class="d-flex align-items-center">
+                    <a href="cart.html" class="btn btn-light position-relative">
+                        <i class="fas fa-shopping-cart text-primary"></i> Cart
+                        <span id="cart-count"
+                            class="position-absolute top-0 start-100 translate-middle badge rounded-pill bg-danger"
+                            style="display: none;">
+                            0
+                        </span>
+                    </a>
+                </div>
+            </div>
+        </div>
+    </nav>
+
+    <!-- Breadcrumbs -->
+    <div class="bg-light py-3 mb-4">
+        <div class="container">
+            <nav aria-label="breadcrumb">
+                <ol class="breadcrumb mb-0">
+                    <li class="breadcrumb-item"><a href="../index.html">Home</a></li>
+                    <li class="breadcrumb-item active" aria-current="page">Products</li>
+                </ol>
+            </nav>
+        </div>
+    </div>
+
+    <!-- Main Content -->
+    <div class="container mb-5">
+        <div class="row">
+            <!-- Sidebar Filters -->
+            <div class="col-lg-3 mb-4">
+                <div class="card shadow-sm">
+                    <div class="card-header">
+                        <h5 class="mb-0">Filters</h5>
+                    </div>
+                    <div class="card-body">
+                        <h6 class="mb-3">Category</h6>
+                        <div class="form-check">
+                            <input class="form-check-input category-filter" type="radio" name="category" id="cat-all"
+                                value="all" checked>
+                            <label class="form-check-label" for="cat-all">All Categories</label>
+                        </div>
+                        <div class="form-check">
+                            <input class="form-check-input category-filter" type="radio" name="category"
+                                id="cat-smartphones" value="smartphones">
+                            <label class="form-check-label" for="cat-smartphones">Smartphones</label>
+                        </div>
+                        <div class="form-check">
+                            <input class="form-check-input category-filter" type="radio" name="category"
+                                id="cat-laptops" value="laptops">
+                            <label class="form-check-label" for="cat-laptops">Laptops</label>
+                        </div>
+                        <div class="form-check">
+                            <input class="form-check-input category-filter" type="radio" name="category" id="cat-audio"
+                                value="audio">
+                            <label class="form-check-label" for="cat-audio">Audio</label>
+                        </div>
+                        <div class="form-check">
+                            <input class="form-check-input category-filter" type="radio" name="category"
+                                id="cat-cameras" value="cameras">
+                            <label class="form-check-label" for="cat-cameras">Cameras</label>
+                        </div>
+                        <div class="form-check">
+                            <input class="form-check-input category-filter" type="radio" name="category" id="cat-gaming"
+                                value="gaming">
+                            <label class="form-check-label" for="cat-gaming">Gaming</label>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Product Grid -->
+            <div class="col-lg-9">
+                <div class="d-flex justify-content-between align-items-center mb-4">
+                    <h4 id="product-count" class="mb-0"
+                        style="background: linear-gradient(135deg, #667eea 0%, #764ba2 100%); -webkit-background-clip: text; -webkit-text-fill-color: transparent; background-clip: text; font-weight: 700;">
+                        Showing 0 products</h4>
+                    <select class="form-select w-auto" id="sort-select">
+                        <option value="default">Default Sorting</option>
+                        <option value="price-low">Price: Low to High</option>
+                        <option value="price-high">Price: High to Low</option>
+                        <option value="rating">Avg. Rating</option>
+                    </select>
+                </div>
+
+                <div class="row" id="products-grid">
+                    <!-- Products loaded via JS -->
+                    <div class="col-12 text-center py-5">
+                        <div class="spinner-border text-primary" role="status">
+                            <span class="visually-hidden">Loading...</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Footer -->
+    <footer>
+        <div class="container">
+            <div class="row">
+                <div class="col-md-4 mb-4">
+                    <h5>ElectroStore</h5>
+                    <p class="text-muted">Your one-stop shop for the best electronics. Quality products, great prices,
+                        and excellent customer service.</p>
+                </div>
+                <div class="col-md-2 mb-4">
+                    <h5>Links</h5>
+                    <ul class="list-unstyled">
+                        <li><a href="../index.html">Home</a></li>
+                        <li><a href="products.html">Products</a></li>
+                        <li><a href="cart.html">Cart</a></li>
+                    </ul>
+                </div>
+                <div class="col-md-2 mb-4">
+                    <h5>Support</h5>
+                    <ul class="list-unstyled">
+                        <li><a href="#">FAQ</a></li>
+                        <li><a href="#">Shipping</a></li>
+                    </ul>
+                </div>
+                <div class="col-md-4 mb-4">
+                    <h5>Contact</h5>
+                    <p><i class="fas fa-map-marker-alt me-2"></i> 123 Tech Street, Silicon Valley, CA</p>
+                    <p><i class="fas fa-phone me-2"></i> +1 234 567 8900</p>
+                </div>
+            </div>
+            <hr class="border-secondary">
+            <div class="text-center text-muted">
+                <p>&copy; 2026 ElectroStore. All rights reserved.</p>
+            </div>
+        </div>
+    </footer>
+
+    <!-- Back to Top Button -->
+    <button id="back-to-top" class="btn btn-primary">
+        <i class="fas fa-arrow-up"></i>
+    </button>
+
+    <!-- Bootstrap JS -->
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+    <!-- Custom JS -->
+    <script src="../js/main.js"></script>
+    <script src="../js/products.js"></script>
+</body>
+
+</html>
