@@ -1,0 +1,36 @@
+<div class="prod-card <%= product.isSold ? 'is-sold' : '' %>">
+  <a href="/products/<%= product.id %>" class="prod-link">
+    <div class="prod-img-wrap">
+      <img src="<%= product.image %>" alt="<%= product.title %>" loading="lazy"
+           onerror="this.src='https://via.placeholder.com/400x280/f0ede8/999?text=No+Image'">
+      <% if (product.isSold) { %><div class="sold-ribbon">SOLD</div><% } %>
+      <span class="cat-tag"><%= product.category %></span>
+      <% if (product.featured) { %><span class="featured-tag"><i class="bi bi-star-fill"></i></span><% } %>
+    </div>
+    <div class="prod-body">
+      <p class="prod-location"><i class="bi bi-geo-alt"></i> <%= product.location %></p>
+      <h3 class="prod-title"><%= product.title %></h3>
+      <div class="prod-price">₹<%= product.price.toLocaleString('en-IN') %></div>
+      <div class="prod-meta">
+        <span class="cond-badge cond-<%= product.condition.toLowerCase().replace(/ /g,'-') %>"><%= product.condition %></span>
+        <span class="prod-views"><i class="bi bi-eye"></i> <%= product.views %></span>
+      </div>
+    </div>
+  </a>
+  <% if (typeof showActions !== 'undefined' && showActions) { %>
+  <div class="prod-actions">
+    <a href="/products/<%= product.id %>/edit" class="btn btn-sm btn-outline-warning">
+      <i class="bi bi-pencil"></i> Edit
+    </a>
+    <form action="/products/<%= product.id %>?_method=DELETE" method="POST" class="d-inline"
+          onsubmit="return confirm('Delete this listing permanently?')">
+      <button class="btn btn-sm btn-outline-danger"><i class="bi bi-trash"></i> Delete</button>
+    </form>
+    <form action="/products/<%= product.id %>/sold" method="POST" class="d-inline">
+      <button class="btn btn-sm btn-outline-<%= product.isSold ? 'success' : 'secondary' %>">
+        <%= product.isSold ? 'Relist' : 'Mark Sold' %>
+      </button>
+    </form>
+  </div>
+  <% } %>
+</div>

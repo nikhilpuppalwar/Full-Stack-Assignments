@@ -1,0 +1,136 @@
+<%- include('../partials/header') %>
+
+<div class="page-banner">
+  <div class="container-fluid px-4">
+    <h1 class="page-banner-title">Browse Listings</h1>
+    <p class="page-banner-sub"><%= total %> items available</p>
+  </div>
+</div>
+
+<section class="py-4">
+  <div class="container-fluid px-4">
+    <div class="row g-4">
+
+      <!-- Sidebar Filters -->
+      <div class="col-lg-3">
+        <div class="filter-box sticky-top" style="top:74px">
+          <div class="filter-hdr">
+            <h6><i class="bi bi-funnel me-2"></i>Filters</h6>
+            <a href="/products" class="filter-clear">Clear All</a>
+          </div>
+          <form action="/products" method="GET">
+            <div class="filter-grp">
+              <label class="filter-lbl">Category</label>
+              <% categories.forEach(cat => { %>
+              <label class="f-radio">
+                <input type="radio" name="category" value="<%= cat %>"
+                  <%= category === cat ? 'checked' : '' %> onchange="this.form.submit()">
+                <span><%= cat %></span>
+              </label>
+              <% }) %>
+            </div>
+
+            <div class="filter-grp">
+              <label class="filter-lbl">Condition</label>
+              <% conditions.forEach(c => { %>
+              <label class="f-radio">
+                <input type="radio" name="condition" value="<%= c %>"
+                  <%= condition === c ? 'checked' : '' %> onchange="this.form.submit()">
+                <span><%= c %></span>
+              </label>
+              <% }) %>
+            </div>
+
+            <div class="filter-grp">
+              <label class="filter-lbl">Price Range (₹)</label>
+              <div class="d-flex gap-2 mb-2">
+                <input type="number" name="minPrice" class="form-control form-control-sm" placeholder="Min" value="<%= minPrice %>">
+                <input type="number" name="maxPrice" class="form-control form-control-sm" placeholder="Max" value="<%= maxPrice %>">
+              </div>
+              <button type="submit" class="btn btn-accent btn-sm w-100">Apply Price</button>
+            </div>
+
+            <input type="hidden" name="search"   value="<%= search %>">
+            <input type="hidden" name="sort"     value="<%= sort %>">
+          </form>
+        </div>
+      </div>
+
+      <!-- Product Grid -->
+      <div class="col-lg-9">
+        <div class="d-flex justify-content-between align-items-center mb-3 flex-wrap gap-2">
+          <span class="text-muted small">
+            <strong><%= total %></strong> listings found
+            <% if (search) { %> for "<em><%= search %></em>"<% } %>
+          </span>
+          <div class="d-flex gap-2 align-items-center">
+            <% if (isAdmin) { %>
+              <a href="/products/new" class="btn btn-accent btn-sm"><i class="bi bi-plus-lg me-1"></i>Add Listing</a>
+            <% } %>
+            <select class="form-select form-select-sm" style="width:auto"
+                    onchange="window.location.href=updateQ('sort',this.value)">
+              <option value="newest"     <%= sort==='newest'     ?'selected':'' %>>Newest First</option>
+              <option value="price_asc"  <%= sort==='price_asc'  ?'selected':'' %>>Price: Low → High</option>
+              <option value="price_desc" <%= sort==='price_desc' ?'selected':'' %>>Price: High → Low</option>
+              <option value="popular"    <%= sort==='popular'    ?'selected':'' %>>Most Viewed</option>
+            </select>
+          </div>
+        </div>
+
+        <% if (products.length === 0) { %>
+        <div class="text-center py-5">
+          <i class="bi bi-search" style="font-size:3rem;color:#ddd;display:block;margin-bottom:16px"></i>
+          <h4>No listings found</h4>
+          <p class="text-muted">Try different keywords or clear your filters.</p>
+          <a href="/products" class="btn btn-accent mt-3">Clear Filters</a>
+        </div>
+        <% } else { %>
+        <div class="row g-3">
+          <% products.forEach(p => { %>
+          <div class="col-xl-4 col-md-6">
+            <%- include('../partials/product-card', { product: p, showActions: isAdmin }) %>
+          </div>
+          <% }) %>
+        </div>
+
+        <% if (totalPages > 1) { %>
+        <nav class="mt-4 d-flex justify-content-center">
+          <ul class="pagination">
+            <% if (currentPage > 1) { %>
+            <li class="page-item">
+              <a class="page-link" href="?<%= new URLSearchParams({search,category,condition,minPrice,maxPrice,sort,page:currentPage-1}) %>">
+                <i class="bi bi-chevron-left"></i>
+              </a>
+            </li>
+            <% } %>
+            <% for (let p = 1; p <= totalPages; p++) { %>
+            <li class="page-item <%= p === currentPage ? 'active' : '' %>">
+              <a class="page-link" href="?<%= new URLSearchParams({search,category,condition,minPrice,maxPrice,sort,page:p}) %>"><%= p %></a>
+            </li>
+            <% } %>
+            <% if (currentPage < totalPages) { %>
+            <li class="page-item">
+              <a class="page-link" href="?<%= new URLSearchParams({search,category,condition,minPrice,maxPrice,sort,page:currentPage+1}) %>">
+                <i class="bi bi-chevron-right"></i>
+              </a>
+            </li>
+            <% } %>
+          </ul>
+        </nav>
+        <% } %>
+        <% } %>
+      </div>
+
+    </div>
+  </div>
+</section>
+
+<script>
+function updateQ(key, val) {
+  const u = new URL(window.location.href);
+  u.searchParams.set(key, val);
+  return u.pathname + u.search;
+}
+</script>
+
+<%- include('../partials/footer') %>

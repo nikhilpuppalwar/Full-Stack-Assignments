@@ -1,0 +1,136 @@
+<%- include('../partials/header') %>
+
+<div class="page-banner">
+  <div class="container-fluid px-4">
+    <h1 class="page-banner-title">Edit Listing</h1>
+    <p class="page-banner-sub"><%= product.title.substring(0,60) %></p>
+  </div>
+</div>
+
+<section class="py-5">
+  <div class="container-fluid px-4">
+    <div class="row justify-content-center">
+      <div class="col-lg-7">
+        <div class="bz-card">
+          <form action="/products/<%= product.id %>?_method=PUT" method="POST" enctype="multipart/form-data" id="editForm" novalidate>
+
+            <div class="form-sec">
+              <div class="form-sec-title"><span class="step-dot">1</span> Basic Info</div>
+              <div class="row g-3">
+                <div class="col-12">
+                  <label class="bz-lbl req">Item Title</label>
+                  <input type="text" name="title" class="form-control bz-input" value="<%= product.title %>" required maxlength="120">
+                </div>
+                <div class="col-md-6">
+                  <label class="bz-lbl req">Category</label>
+                  <select name="category" class="form-select bz-input" required>
+                    <% categories.forEach(c => { %>
+                    <option value="<%= c %>" <%= product.category===c?'selected':'' %>><%= c %></option>
+                    <% }) %>
+                  </select>
+                </div>
+                <div class="col-md-6">
+                  <label class="bz-lbl req">Condition</label>
+                  <select name="condition" class="form-select bz-input" required>
+                    <% conditions.forEach(c => { %>
+                    <option value="<%= c %>" <%= product.condition===c?'selected':'' %>><%= c %></option>
+                    <% }) %>
+                  </select>
+                </div>
+                <div class="col-md-6">
+                  <label class="bz-lbl req">Asking Price (₹)</label>
+                  <div class="input-group">
+                    <span class="input-group-text bz-addon">₹</span>
+                    <input type="number" name="price" class="form-control bz-input" value="<%= product.price %>" required min="1">
+                  </div>
+                </div>
+                <div class="col-md-6">
+                  <label class="bz-lbl">City / Location</label>
+                  <div class="input-group">
+                    <span class="input-group-text bz-addon"><i class="bi bi-geo-alt"></i></span>
+                    <input type="text" name="location" class="form-control bz-input" value="<%= product.location %>">
+                  </div>
+                </div>
+                <div class="col-md-6">
+                  <label class="bz-lbl">Contact Phone</label>
+                  <div class="input-group">
+                    <span class="input-group-text bz-addon"><i class="bi bi-telephone"></i></span>
+                    <input type="tel" name="phone" class="form-control bz-input" value="<%= product.seller.phone || '' %>">
+                  </div>
+                </div>
+                <div class="col-md-6">
+                  <label class="bz-lbl">Status</label>
+                  <div class="mt-2">
+                    <div class="form-check bz-check">
+                      <input class="form-check-input" type="checkbox" name="isSold" id="isSold" <%= product.isSold?'checked':'' %>>
+                      <label class="form-check-label" for="isSold">Mark as Sold</label>
+                    </div>
+                    <% if (isAdmin) { %>
+                    <div class="form-check bz-check mt-1">
+                      <input class="form-check-input" type="checkbox" name="featured" id="featured" <%= product.featured?'checked':'' %>>
+                      <label class="form-check-label" for="featured">Featured Listing</label>
+                    </div>
+                    <% } %>
+                  </div>
+                </div>
+              </div>
+            </div>
+
+            <div class="form-sec">
+              <div class="form-sec-title"><span class="step-dot">2</span> Description</div>
+              <textarea name="description" class="form-control bz-input" rows="6" required maxlength="3000" id="descArea"><%= product.description %></textarea>
+              <div class="d-flex justify-content-end mt-1">
+                <small class="text-muted" id="charCount"><%= product.description.length %> / 3000</small>
+              </div>
+            </div>
+
+            <div class="form-sec">
+              <div class="form-sec-title"><span class="step-dot">3</span> Update Photo</div>
+              <div class="d-flex align-items-center gap-3 mb-3">
+                <img src="<%= product.image %>" alt="current" class="current-thumb"
+                     onerror="this.src='https://via.placeholder.com/100x80/f0ede8/999?text=No+Img'">
+                <span class="text-muted small">Current image — upload below to replace</span>
+              </div>
+              <div class="upload-zone" id="dropZone">
+                <input type="file" name="image" id="imgFile" accept="image/*" class="d-none">
+                <div id="upPh">
+                  <i class="bi bi-cloud-arrow-up upload-ico"></i>
+                  <p>Drag & drop or <span class="up-link">click to replace</span></p>
+                  <small>JPG, PNG, WebP — Max 5 MB</small>
+                </div>
+                <img id="imgPrev" class="upload-prev d-none" alt="New Preview">
+              </div>
+            </div>
+
+            <div class="form-actions">
+              <a href="/products/<%= product.id %>" class="btn btn-outline-secondary">Cancel</a>
+              <button type="submit" class="btn btn-accent px-5">
+                <i class="bi bi-check-lg me-2"></i>Save Changes
+              </button>
+            </div>
+          </form>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<script>
+const ta = document.getElementById('descArea');
+const cc = document.getElementById('charCount');
+ta.addEventListener('input', () => cc.textContent = `${ta.value.length} / 3000`);
+
+const zone = document.getElementById('dropZone');
+const inp  = document.getElementById('imgFile');
+const prev = document.getElementById('imgPrev');
+const ph   = document.getElementById('upPh');
+zone.addEventListener('click', () => inp.click());
+zone.addEventListener('dragover',  e => { e.preventDefault(); zone.classList.add('drag-over'); });
+zone.addEventListener('dragleave', () => zone.classList.remove('drag-over'));
+zone.addEventListener('drop', e => { e.preventDefault(); zone.classList.remove('drag-over'); if(e.dataTransfer.files[0]) showPrev(e.dataTransfer.files[0]); });
+inp.addEventListener('change', () => { if(inp.files[0]) showPrev(inp.files[0]); });
+function showPrev(f) { const r=new FileReader(); r.onload=e=>{prev.src=e.target.result;prev.classList.remove('d-none');ph.classList.add('d-none');}; r.readAsDataURL(f); }
+document.getElementById('editForm').addEventListener('submit', function(e) { if(!this.checkValidity()){e.preventDefault();e.stopPropagation();} this.classList.add('was-validated'); });
+</script>
+
+<%- include('../partials/footer') %>

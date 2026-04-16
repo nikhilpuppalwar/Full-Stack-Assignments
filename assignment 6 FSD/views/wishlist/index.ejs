@@ -1,0 +1,26 @@
+<%- include('../partials/header') %>
+<div class="page-banner">
+  <div class="container-fluid px-4">
+    <h1 class="page-banner-title"><i class="bi bi-heart-fill me-3" style="color:#FF4500"></i>My Wishlist</h1>
+    <p class="page-banner-sub"><%= items.length %> saved item<%= items.length!==1?'s':'' %></p>
+  </div>
+</div>
+<section class="py-5">
+  <div class="container-fluid px-4">
+    <% if (items.length===0) { %>
+    <div class="text-center py-5">
+      <i class="bi bi-heart" style="font-size:3.5rem;color:#ddd;display:block;margin-bottom:16px"></i>
+      <h3>Your wishlist is empty</h3>
+      <p class="text-muted">Browse listings and click <i class="bi bi-heart"></i> to save items.</p>
+      <a href="/products" class="btn btn-accent mt-3">Browse Listings</a>
+    </div>
+    <% } else { %>
+    <div class="row g-3">
+      <% items.forEach(p => { %>
+      <div class="col-xl-3 col-lg-4 col-md-6"><%- include('../partials/product-card',{product:p,showActions:false}) %></div>
+      <% }) %>
+    </div>
+    <% } %>
+  </div>
+</section>
+<%- include('../partials/footer') %>

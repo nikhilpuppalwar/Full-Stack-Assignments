@@ -1,0 +1,107 @@
+<%- include('../partials/header') %>
+
+<section class="auth-section">
+  <div class="auth-bg"></div>
+  <div class="container">
+    <div class="row justify-content-center align-items-center" style="min-height:100vh;padding:80px 0">
+      <div class="col-lg-5 col-md-7">
+        <div class="auth-card">
+          <a href="/" class="auth-logo">BAZAAR</a>
+          <h2 class="auth-title">Create Account</h2>
+          <p class="auth-sub">Join thousands of buyers and sellers. It's completely free.</p>
+
+          <form action="/auth/register" method="POST" id="regForm" novalidate>
+            <div class="mb-3">
+              <label class="bz-lbl req">Full Name</label>
+              <div class="input-group">
+                <span class="input-group-text bz-addon"><i class="bi bi-person"></i></span>
+                <input type="text" name="name" class="form-control bz-input" placeholder="Your full name" required minlength="2">
+              </div>
+              <div class="invalid-feedback">Name required (min 2 characters).</div>
+            </div>
+
+            <div class="mb-3">
+              <label class="bz-lbl req">Email Address</label>
+              <div class="input-group">
+                <span class="input-group-text bz-addon"><i class="bi bi-envelope"></i></span>
+                <input type="email" name="email" class="form-control bz-input" placeholder="you@example.com" required>
+              </div>
+              <div class="invalid-feedback">Enter a valid email.</div>
+            </div>
+
+            <div class="mb-3">
+              <label class="bz-lbl">Phone <small class="text-muted">(optional)</small></label>
+              <div class="input-group">
+                <span class="input-group-text bz-addon"><i class="bi bi-telephone"></i></span>
+                <input type="tel" name="phone" class="form-control bz-input" placeholder="+91 98765 43210">
+              </div>
+            </div>
+
+            <div class="mb-3">
+              <label class="bz-lbl req">Password</label>
+              <div class="input-group">
+                <span class="input-group-text bz-addon"><i class="bi bi-lock"></i></span>
+                <input type="password" name="password" id="pw1" class="form-control bz-input" placeholder="Min 6 characters" required minlength="6">
+                <button type="button" class="input-group-text bz-addon" onclick="togglePw('pw1','e1')">
+                  <i class="bi bi-eye" id="e1"></i>
+                </button>
+              </div>
+              <div id="pwBar" class="mt-1" style="min-height:22px"></div>
+              <div class="invalid-feedback">Min 6 characters.</div>
+            </div>
+
+            <div class="mb-4">
+              <label class="bz-lbl req">Confirm Password</label>
+              <div class="input-group">
+                <span class="input-group-text bz-addon"><i class="bi bi-lock-fill"></i></span>
+                <input type="password" name="confirmPassword" id="pw2" class="form-control bz-input" placeholder="Repeat password" required>
+                <button type="button" class="input-group-text bz-addon" onclick="togglePw('pw2','e2')">
+                  <i class="bi bi-eye" id="e2"></i>
+                </button>
+              </div>
+              <div class="invalid-feedback" id="cfMsg">Passwords must match.</div>
+            </div>
+
+            <button type="submit" class="btn btn-accent w-100 btn-lg">
+              <i class="bi bi-person-plus me-2"></i>Create Free Account
+            </button>
+          </form>
+
+          <div class="auth-div"><span>OR</span></div>
+          <p class="text-center text-muted" style="font-size:.875rem">
+            Already have an account? <a href="/auth/login" class="auth-link">Sign in →</a>
+          </p>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<script>
+function togglePw(iId, eId) {
+  const i = document.getElementById(iId), e = document.getElementById(eId);
+  i.type = i.type === 'password' ? 'text' : 'password';
+  e.className = i.type === 'password' ? 'bi bi-eye' : 'bi bi-eye-slash';
+}
+document.getElementById('pw1').addEventListener('input', function() {
+  const v = this.value, bar = document.getElementById('pwBar');
+  let s = 0;
+  if (v.length >= 6) s++; if (v.length >= 10) s++;
+  if (/[A-Z]/.test(v)) s++; if (/[0-9]/.test(v)) s++; if (/[^A-Za-z0-9]/.test(v)) s++;
+  const cols = ['','#ef4444','#f97316','#eab308','#22c55e','#16a34a'];
+  const labs = ['','Weak','Fair','Good','Strong','Very Strong'];
+  bar.innerHTML = v ? `<div style="height:4px;width:${s*20}%;background:${cols[s]};border-radius:2px;transition:.3s"></div><small style="color:${cols[s]};font-size:.72rem">${labs[s]}</small>` : '';
+});
+document.getElementById('regForm').addEventListener('submit', function(e) {
+  if (document.getElementById('pw1').value !== document.getElementById('pw2').value) {
+    e.preventDefault();
+    document.getElementById('pw2').classList.add('is-invalid');
+    document.getElementById('cfMsg').textContent = 'Passwords do not match.';
+    return;
+  }
+  if (!this.checkValidity()) { e.preventDefault(); e.stopPropagation(); }
+  this.classList.add('was-validated');
+});
+</script>
+
+<%- include('../partials/footer') %>

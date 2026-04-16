@@ -1,0 +1,136 @@
+<%- include('../partials/header') %>
+
+<div class="page-banner">
+  <div class="container-fluid px-4">
+    <h1 class="page-banner-title">Post a New Listing</h1>
+    <p class="page-banner-sub">Fill in the details — your ad goes live instantly for free.</p>
+  </div>
+</div>
+
+<section class="py-5">
+  <div class="container-fluid px-4">
+    <div class="row justify-content-center">
+      <div class="col-lg-7">
+        <div class="bz-card">
+          <form action="/products" method="POST" enctype="multipart/form-data" id="postForm" novalidate>
+
+            <div class="form-sec">
+              <div class="form-sec-title"><span class="step-dot">1</span> Basic Info</div>
+              <div class="row g-3">
+                <div class="col-12">
+                  <label class="bz-lbl req">Item Title</label>
+                  <input type="text" name="title" class="form-control bz-input"
+                         placeholder="e.g. Honda City 2019 — Well Maintained" required maxlength="120">
+                  <div class="invalid-feedback">Title is required.</div>
+                </div>
+                <div class="col-md-6">
+                  <label class="bz-lbl req">Category</label>
+                  <select name="category" class="form-select bz-input" required>
+                    <option value="">Select…</option>
+                    <% categories.forEach(c => { %><option value="<%= c %>"><%= c %></option><% }) %>
+                  </select>
+                  <div class="invalid-feedback">Please select a category.</div>
+                </div>
+                <div class="col-md-6">
+                  <label class="bz-lbl req">Condition</label>
+                  <select name="condition" class="form-select bz-input" required>
+                    <% conditions.forEach(c => { %><option value="<%= c %>"><%= c %></option><% }) %>
+                  </select>
+                </div>
+                <div class="col-md-6">
+                  <label class="bz-lbl req">Asking Price (₹)</label>
+                  <div class="input-group">
+                    <span class="input-group-text bz-addon">₹</span>
+                    <input type="number" name="price" class="form-control bz-input" placeholder="5000" required min="1">
+                  </div>
+                  <div class="invalid-feedback">Enter a valid price.</div>
+                </div>
+                <div class="col-md-6">
+                  <label class="bz-lbl">City / Location</label>
+                  <div class="input-group">
+                    <span class="input-group-text bz-addon"><i class="bi bi-geo-alt"></i></span>
+                    <input type="text" name="location" class="form-control bz-input" placeholder="e.g. Mumbai, Maharashtra">
+                  </div>
+                </div>
+                <div class="col-md-6">
+                  <label class="bz-lbl">Contact Phone</label>
+                  <div class="input-group">
+                    <span class="input-group-text bz-addon"><i class="bi bi-telephone"></i></span>
+                    <input type="tel" name="phone" class="form-control bz-input" placeholder="+91 98765 43210">
+                  </div>
+                </div>
+              </div>
+            </div>
+
+            <div class="form-sec">
+              <div class="form-sec-title"><span class="step-dot">2</span> Description</div>
+              <textarea name="description" class="form-control bz-input" rows="6"
+                placeholder="Describe your item — age, usage, reason for selling, any defects…"
+                required maxlength="3000" id="descArea"></textarea>
+              <div class="d-flex justify-content-end mt-1">
+                <small class="text-muted" id="charCount">0 / 3000</small>
+              </div>
+              <div class="invalid-feedback">Please describe your item.</div>
+            </div>
+
+            <div class="form-sec">
+              <div class="form-sec-title"><span class="step-dot">3</span> Upload Photo</div>
+              <div class="upload-zone" id="dropZone">
+                <input type="file" name="image" id="imgFile" accept="image/*" class="d-none">
+                <div id="upPh">
+                  <i class="bi bi-cloud-arrow-up upload-ico"></i>
+                  <p>Drag & drop or <span class="up-link">click to upload</span></p>
+                  <small>JPG, PNG, WebP — Max 5 MB</small>
+                </div>
+                <img id="imgPrev" class="upload-prev d-none" alt="Preview">
+              </div>
+            </div>
+
+            <div class="form-actions">
+              <a href="/products" class="btn btn-outline-secondary">Cancel</a>
+              <button type="submit" class="btn btn-accent px-5">
+                <i class="bi bi-megaphone me-2"></i>Post Listing
+              </button>
+            </div>
+          </form>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<script>
+// Char counter
+const ta = document.getElementById('descArea');
+const cc = document.getElementById('charCount');
+ta.addEventListener('input', () => cc.textContent = `${ta.value.length} / 3000`);
+
+// Image upload with drag & drop
+const zone = document.getElementById('dropZone');
+const inp  = document.getElementById('imgFile');
+const prev = document.getElementById('imgPrev');
+const ph   = document.getElementById('upPh');
+
+zone.addEventListener('click', () => inp.click());
+zone.addEventListener('dragover',  e => { e.preventDefault(); zone.classList.add('drag-over'); });
+zone.addEventListener('dragleave', () => zone.classList.remove('drag-over'));
+zone.addEventListener('drop', e => {
+  e.preventDefault(); zone.classList.remove('drag-over');
+  if (e.dataTransfer.files[0]) showPrev(e.dataTransfer.files[0]);
+});
+inp.addEventListener('change', () => { if (inp.files[0]) showPrev(inp.files[0]); });
+
+function showPrev(file) {
+  const r = new FileReader();
+  r.onload = e => { prev.src = e.target.result; prev.classList.remove('d-none'); ph.classList.add('d-none'); };
+  r.readAsDataURL(file);
+}
+
+// Validation
+document.getElementById('postForm').addEventListener('submit', function(e) {
+  if (!this.checkValidity()) { e.preventDefault(); e.stopPropagation(); }
+  this.classList.add('was-validated');
+});
+</script>
+
+<%- include('../partials/footer') %>

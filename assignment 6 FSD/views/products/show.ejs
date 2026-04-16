@@ -1,0 +1,198 @@
+<%- include('../partials/header') %>
+
+<section class="py-5">
+  <div class="container-fluid px-4">
+
+    <!-- Breadcrumb -->
+    <nav class="mb-4">
+      <ol class="breadcrumb bz-bc">
+        <li class="breadcrumb-item"><a href="/">Home</a></li>
+        <li class="breadcrumb-item"><a href="/products">Browse</a></li>
+        <li class="breadcrumb-item"><a href="/products?category=<%= product.category %>"><%= product.category %></a></li>
+        <li class="breadcrumb-item active"><%= product.title.substring(0,35) %>...</li>
+      </ol>
+    </nav>
+
+    <div class="row g-5">
+
+      <!-- LEFT: Image + Description -->
+      <div class="col-lg-7">
+        <div class="detail-img-box">
+          <img src="<%= product.image %>" alt="<%= product.title %>"
+               onerror="this.src='https://via.placeholder.com/800x500/f0ede8/999?text=No+Image'">
+          <% if (product.isSold) { %><div class="detail-sold-stamp">SOLD</div><% } %>
+          <span class="detail-cat-tag"><%= product.category %></span>
+        </div>
+
+        <div class="detail-body mt-4">
+          <!-- Title row -->
+          <div class="d-flex justify-content-between align-items-start gap-3">
+            <div>
+              <h1 class="detail-title"><%= product.title %></h1>
+              <div class="detail-meta">
+                <span class="cond-badge cond-<%= product.condition.toLowerCase().replace(/ /g,'-') %>"><%= product.condition %></span>
+                <span class="text-muted"><i class="bi bi-geo-alt me-1"></i><%= product.location %></span>
+                <span class="text-muted"><i class="bi bi-eye me-1"></i><%= product.views %> views</span>
+                <span class="text-muted"><i class="bi bi-clock me-1"></i>
+                  <%= new Date(product.createdAt).toLocaleDateString('en-IN',{day:'numeric',month:'short',year:'numeric'}) %>
+                </span>
+              </div>
+            </div>
+            <% if (currentUser) { %>
+            <button class="wl-btn <%= inWishlist ? 'active' : '' %>" id="wlBtn" data-id="<%= product.id %>">
+              <i class="bi bi-heart<%= inWishlist ? '-fill' : '' %>" id="wlIcon"></i>
+            </button>
+            <% } %>
+          </div>
+
+          <div class="detail-price mt-3">₹<%= product.price.toLocaleString('en-IN') %></div>
+
+          <!-- Description -->
+          <div class="detail-sec mt-4">
+            <h5 class="detail-sec-label">Description</h5>
+            <p class="detail-desc"><%= product.description %></p>
+          </div>
+
+          <!-- Specs -->
+          <div class="detail-sec mt-4">
+            <h5 class="detail-sec-label">Details</h5>
+            <div class="specs-grid">
+              <div class="spec-item"><span class="spec-lbl">Category</span><span class="spec-val"><%= product.category %></span></div>
+              <div class="spec-item"><span class="spec-lbl">Condition</span><span class="spec-val"><%= product.condition %></span></div>
+              <div class="spec-item"><span class="spec-lbl">Location</span><span class="spec-val"><%= product.location %></span></div>
+              <div class="spec-item"><span class="spec-lbl">Posted</span><span class="spec-val"><%= new Date(product.createdAt).toLocaleDateString('en-IN') %></span></div>
+            </div>
+          </div>
+
+          <!-- Seller / Admin Actions -->
+          <% if (isSeller || isAdmin) { %>
+          <div class="detail-sec mt-4">
+            <h5 class="detail-sec-label">Manage This Listing</h5>
+            <div class="d-flex gap-2 flex-wrap">
+              <a href="/products/<%= product.id %>/edit" class="btn btn-warning btn-sm">
+                <i class="bi bi-pencil me-1"></i>Edit
+              </a>
+              <form action="/products/<%= product.id %>/sold" method="POST" class="d-inline">
+                <button class="btn btn-sm btn-<%= product.isSold ? 'success':'secondary' %>">
+                  <i class="bi bi-<%= product.isSold ? 'arrow-counterclockwise':'check-circle' %> me-1"></i>
+                  <%= product.isSold ? 'Relist' : 'Mark as Sold' %>
+                </button>
+              </form>
+              <form action="/products/<%= product.id %>?_method=DELETE" method="POST" class="d-inline"
+                    onsubmit="return confirm('Delete this listing permanently?')">
+                <button class="btn btn-danger btn-sm"><i class="bi bi-trash me-1"></i>Delete</button>
+              </form>
+            </div>
+          </div>
+          <% } %>
+        </div>
+      </div>
+
+      <!-- RIGHT: Price + Seller + Contact -->
+      <div class="col-lg-5">
+        <div class="sticky-top" style="top:80px">
+
+          <!-- Price card -->
+          <div class="price-card mb-4">
+            <div class="price-card-top">
+              <div>
+                <div class="price-big">₹<%= product.price.toLocaleString('en-IN') %></div>
+              </div>
+              <span class="price-status <%= product.isSold ? 'status-sold' : 'status-avail' %>">
+                <%= product.isSold ? 'Sold' : 'Available' %>
+              </span>
+            </div>
+            <div class="price-info-grid">
+              <div class="pi-item"><i class="bi bi-tag-fill"></i><span><%= product.category %></span></div>
+              <div class="pi-item"><i class="bi bi-award-fill"></i><span><%= product.condition %></span></div>
+              <div class="pi-item"><i class="bi bi-geo-alt-fill"></i><span><%= product.location %></span></div>
+            </div>
+          </div>
+
+          <!-- Seller card -->
+          <div class="seller-card mb-4">
+            <h6 class="seller-card-title"><i class="bi bi-person-circle me-2"></i>Seller Info</h6>
+            <div class="seller-row">
+              <div class="seller-avatar"><%= product.seller.name ? product.seller.name[0].toUpperCase() : 'S' %></div>
+              <div>
+                <div class="seller-name"><%= product.seller.name %></div>
+                <div class="text-muted small">Member seller</div>
+              </div>
+            </div>
+            <% if (product.seller.phone) { %>
+            <a href="tel:<%= product.seller.phone %>" class="btn btn-accent w-100 mt-3">
+              <i class="bi bi-telephone-fill me-2"></i>Call Seller
+            </a>
+            <% } %>
+            <% if (product.seller.email && currentUser) { %>
+            <a href="mailto:<%= product.seller.email %>?subject=Inquiry: <%= product.title %>"
+               class="btn btn-outline-dark w-100 mt-2">
+              <i class="bi bi-envelope me-2"></i>Email Seller
+            </a>
+            <% } %>
+          </div>
+
+          <!-- Inquiry form -->
+          <% if (currentUser && !isSeller) { %>
+          <div class="inq-form-card">
+            <h6 class="seller-card-title"><i class="bi bi-chat-dots me-2"></i>Send a Message</h6>
+            <form action="/inquiries" method="POST">
+              <input type="hidden" name="productId" value="<%= product.id %>">
+              <textarea name="message" class="form-control bz-input mb-3" rows="4"
+                placeholder="Hi, is this still available? I'm interested…" required maxlength="1000"></textarea>
+              <button type="submit" class="btn btn-accent w-100">
+                <i class="bi bi-send me-2"></i>Send Message
+              </button>
+            </form>
+          </div>
+          <% } else if (!currentUser) { %>
+          <div class="inq-form-card text-center">
+            <i class="bi bi-lock-fill fs-2 text-muted d-block mb-2"></i>
+            <p class="text-muted mb-3">Log in to message the seller or save this item</p>
+            <a href="/auth/login" class="btn btn-accent w-100">Login to Contact</a>
+          </div>
+          <% } %>
+        </div>
+      </div>
+
+    </div>
+
+    <!-- Related Listings -->
+    <% if (related.length > 0) { %>
+    <div class="mt-5 pt-4">
+      <div class="sec-hdr">
+        <h2 class="sec-title"><span class="acc-bar"></span>Similar Listings</h2>
+        <a href="/products?category=<%= product.category %>" class="see-all">See All <i class="bi bi-arrow-right"></i></a>
+      </div>
+      <div class="row g-3 mt-1">
+        <% related.forEach(r => { %>
+        <div class="col-xl-3 col-lg-4 col-md-6">
+          <%- include('../partials/product-card', { product: r, showActions: false }) %>
+        </div>
+        <% }) %>
+      </div>
+    </div>
+    <% } %>
+
+  </div>
+</section>
+
+<script>
+const wlBtn = document.getElementById('wlBtn');
+if (wlBtn) {
+  wlBtn.addEventListener('click', async () => {
+    const res  = await fetch(`/wishlist/toggle/${wlBtn.dataset.id}`, { method: 'POST' });
+    const data = await res.json();
+    const icon = document.getElementById('wlIcon');
+    if (data.status === 'added') {
+      icon.className = 'bi bi-heart-fill';
+      wlBtn.classList.add('active');
+    } else {
+      icon.className = 'bi bi-heart';
+      wlBtn.classList.remove('active');
+    }
+  });
+}
+</script>
+
+<%- include('../partials/footer') %>

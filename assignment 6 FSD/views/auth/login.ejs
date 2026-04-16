@@ -1,0 +1,82 @@
+<%- include('../partials/header') %>
+
+<section class="auth-section">
+  <div class="auth-bg"></div>
+  <div class="container">
+    <div class="row justify-content-center align-items-center" style="min-height:100vh;padding:80px 0">
+      <div class="col-lg-5 col-md-7">
+        <div class="auth-card">
+          <a href="/" class="auth-logo">BAZAAR</a>
+          <h2 class="auth-title">Sign In</h2>
+          <p class="auth-sub">Welcome back! Access your listings, inbox and wishlist.</p>
+
+          <form action="/auth/login" method="POST" id="loginForm" novalidate>
+            <div class="mb-3">
+              <label class="bz-lbl">Email Address</label>
+              <div class="input-group">
+                <span class="input-group-text bz-addon"><i class="bi bi-envelope"></i></span>
+                <input type="email" name="email" class="form-control bz-input" placeholder="you@example.com" required>
+              </div>
+              <div class="invalid-feedback">Enter a valid email.</div>
+            </div>
+
+            <div class="mb-4">
+              <label class="bz-lbl">Password</label>
+              <div class="input-group">
+                <span class="input-group-text bz-addon"><i class="bi bi-lock"></i></span>
+                <input type="password" name="password" id="pwIn" class="form-control bz-input" placeholder="Your password" required>
+                <button type="button" class="input-group-text bz-addon" onclick="togglePw('pwIn','eyIc')">
+                  <i class="bi bi-eye" id="eyIc"></i>
+                </button>
+              </div>
+              <div class="invalid-feedback">Password required.</div>
+            </div>
+
+            <button type="submit" class="btn btn-accent w-100 btn-lg">
+              <i class="bi bi-box-arrow-in-right me-2"></i>Sign In
+            </button>
+          </form>
+
+          <div class="auth-div"><span>OR</span></div>
+          <p class="text-center text-muted" style="font-size:.875rem">
+            Don't have an account? <a href="/auth/register" class="auth-link">Create one free →</a>
+          </p>
+
+          <!-- Demo credentials -->
+          <div class="demo-box mt-4 text-center">
+            <p class="demo-label text-muted mb-2">Quick Login (Demo Accounts)</p>
+            <div class="d-flex gap-2 flex-wrap justify-content-center">
+              <button type="button" class="btn btn-sm btn-outline-secondary" onclick="autoLogin('admin@bazaar.com', 'Admin@123')">
+                <i class="bi bi-shield-check me-1"></i> Admin Login
+              </button>
+              <button type="button" class="btn btn-sm btn-outline-secondary" onclick="autoLogin('rahul@example.com', 'Admin@123')">
+                <i class="bi bi-person me-1"></i> User Login
+              </button>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<script>
+function autoLogin(email, password) {
+  document.querySelector('input[name="email"]').value = email;
+  document.querySelector('input[name="password"]').value = password;
+  document.getElementById('loginForm').submit();
+}
+
+function togglePw(inputId, iconId) {
+  const i = document.getElementById(inputId);
+  const ic = document.getElementById(iconId);
+  i.type = i.type === 'password' ? 'text' : 'password';
+  ic.className = i.type === 'password' ? 'bi bi-eye' : 'bi bi-eye-slash';
+}
+document.getElementById('loginForm').addEventListener('submit', function(e) {
+  if (!this.checkValidity()) { e.preventDefault(); e.stopPropagation(); }
+  this.classList.add('was-validated');
+});
+</script>
+
+<%- include('../partials/footer') %>

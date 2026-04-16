@@ -1,0 +1,38 @@
+<%- include('../partials/header') %>
+
+<div class="page-banner">
+  <div class="container-fluid px-4">
+    <h1 class="page-banner-title">My Listings</h1>
+    <p class="page-banner-sub">Everything you are currently selling</p>
+  </div>
+</div>
+
+<section class="py-5">
+  <div class="container-fluid px-4">
+    <div class="d-flex justify-content-between align-items-center mb-4">
+      <p class="text-muted mb-0"><%= products.length %> listing<%= products.length !== 1 ? 's' : '' %></p>
+      <a href="/products/new" class="btn btn-accent btn-sm">
+        <i class="bi bi-plus-lg me-1"></i>Post New Ad
+      </a>
+    </div>
+
+    <% if (products.length === 0) { %>
+    <div class="text-center py-5">
+      <i class="bi bi-megaphone" style="font-size:3.5rem;color:#ddd;display:block;margin-bottom:16px"></i>
+      <h3>No listings yet</h3>
+      <p class="text-muted">Start selling by posting your first ad — it's free.</p>
+      <a href="/products/new" class="btn btn-accent mt-3">Post Free Ad</a>
+    </div>
+    <% } else { %>
+    <div class="row g-3">
+      <% products.forEach(p => { %>
+      <div class="col-xl-3 col-lg-4 col-md-6">
+        <%- include('../partials/product-card', { product: p, showActions: true }) %>
+      </div>
+      <% }) %>
+    </div>
+    <% } %>
+  </div>
+</section>
+
+<%- include('../partials/footer') %>

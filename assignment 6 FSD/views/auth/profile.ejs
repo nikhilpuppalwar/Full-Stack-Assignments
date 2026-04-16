@@ -1,0 +1,99 @@
+<%- include('../partials/header') %>
+
+<div class="page-banner">
+  <div class="container-fluid px-4">
+    <h1 class="page-banner-title">My Profile</h1>
+    <p class="page-banner-sub">Manage your account, listings and wishlist</p>
+  </div>
+</div>
+
+<section class="py-5">
+  <div class="container-fluid px-4">
+    <div class="row g-4">
+
+      <!-- Left: profile card + edit -->
+      <div class="col-lg-4">
+        <div class="profile-card">
+          <div class="profile-avatar"><%= user.name[0].toUpperCase() %></div>
+          <h3 class="profile-name"><%= user.name %></h3>
+          <p class="profile-email"><%= user.email %></p>
+          <% if (user.phone) { %><p class="profile-phone"><i class="bi bi-telephone me-2"></i><%= user.phone %></p><% } %>
+          <% if (user.isAdmin) { %><span class="admin-badge"><i class="bi bi-shield-check me-1"></i>Admin</span><% } %>
+          <div class="profile-stats">
+            <div class="ps-item"><span class="ps-n"><%= listings.length %></span><span class="ps-l">Listings</span></div>
+            <div class="ps-div"></div>
+            <div class="ps-item"><span class="ps-n"><%= wishlistItems.length %></span><span class="ps-l">Saved</span></div>
+            <div class="ps-div"></div>
+            <div class="ps-item"><span class="ps-n"><%= new Date(user.createdAt).getFullYear() %></span><span class="ps-l">Joined</span></div>
+          </div>
+        </div>
+
+        <div class="bz-card mt-4">
+          <div class="form-sec-title mb-3" style="font-size:.95rem">Edit Profile</div>
+          <form action="/auth/profile?_method=PUT" method="POST">
+            <div class="mb-3">
+              <label class="bz-lbl">Name</label>
+              <input type="text" name="name" class="form-control bz-input" value="<%= user.name %>" required>
+            </div>
+            <div class="mb-3">
+              <label class="bz-lbl">Phone</label>
+              <input type="tel" name="phone" class="form-control bz-input" value="<%= user.phone || '' %>" placeholder="+91…">
+            </div>
+            <button type="submit" class="btn btn-accent w-100">Save Changes</button>
+          </form>
+        </div>
+      </div>
+
+      <!-- Right: tabs -->
+      <div class="col-lg-8">
+        <ul class="nav nav-tabs bz-tabs mb-4">
+          <li class="nav-item">
+            <button class="nav-link active" data-bs-toggle="tab" data-bs-target="#myListings">
+              <i class="bi bi-tags me-1"></i>My Listings (<%= listings.length %>)
+            </button>
+          </li>
+          <li class="nav-item">
+            <button class="nav-link" data-bs-toggle="tab" data-bs-target="#myWishlist">
+              <i class="bi bi-heart me-1"></i>Wishlist (<%= wishlistItems.length %>)
+            </button>
+          </li>
+        </ul>
+        <div class="tab-content">
+          <div class="tab-pane fade show active" id="myListings">
+            <% if (listings.length === 0) { %>
+            <div class="text-center py-4">
+              <i class="bi bi-tags" style="font-size:2.5rem;color:#ddd;display:block;margin-bottom:12px"></i>
+              <h5>No listings yet</h5>
+              <a href="/products/new" class="btn btn-accent mt-2">Post First Ad</a>
+            </div>
+            <% } else { %>
+            <div class="row g-3">
+              <% listings.forEach(p => { %>
+              <div class="col-md-6"><%- include('../partials/product-card', {product:p, showActions:true}) %></div>
+              <% }) %>
+            </div>
+            <% } %>
+          </div>
+          <div class="tab-pane fade" id="myWishlist">
+            <% if (wishlistItems.length === 0) { %>
+            <div class="text-center py-4">
+              <i class="bi bi-heart" style="font-size:2.5rem;color:#ddd;display:block;margin-bottom:12px"></i>
+              <h5>Your wishlist is empty</h5>
+              <a href="/products" class="btn btn-accent mt-2">Browse Listings</a>
+            </div>
+            <% } else { %>
+            <div class="row g-3">
+              <% wishlistItems.forEach(p => { %>
+              <div class="col-md-6"><%- include('../partials/product-card', {product:p, showActions:false}) %></div>
+              <% }) %>
+            </div>
+            <% } %>
+          </div>
+        </div>
+      </div>
+
+    </div>
+  </div>
+</section>
+
+<%- include('../partials/footer') %>

@@ -1,0 +1,137 @@
+{
+  "users": [
+    {
+      "id": "admin-001",
+      "name": "Admin",
+      "email": "admin@bazaar.com",
+      "password": "$2a$12$bP/t6bTCmFXmgNUi0E8xMOUy2a6Rw5FCYIsrD0IfROheOtkOMIcEy",
+      "phone": "+91 98765 00000",
+      "isAdmin": true,
+      "wishlist": [],
+      "createdAt": "2024-01-01T00:00:00.000Z"
+    },
+    {
+      "id": "user-001",
+      "name": "Rahul Sharma",
+      "email": "rahul@example.com",
+      "password": "$2a$12$bP/t6bTCmFXmgNUi0E8xMOUy2a6Rw5FCYIsrD0IfROheOtkOMIcEy",
+      "phone": "+91 98765 43210",
+      "isAdmin": false,
+      "wishlist": [],
+      "createdAt": "2024-01-02T00:00:00.000Z"
+    },
+    {
+      "id": "c9b57634-1388-4f40-ab47-e04f35955a01",
+      "name": "joy",
+      "email": "joyseller@gmail.com",
+      "password": "$2a$12$Mpv99sT7ezboUkVnv0ETwehxu9kr25tTCEBlqbEkVykzaf94TeEZG",
+      "phone": "9876584245",
+      "isAdmin": false,
+      "wishlist": [],
+      "createdAt": "2026-03-22T12:25:39.246Z"
+    },
+    {
+      "id": "33167133-ccb5-49c6-b749-e7f2dd1cb730",
+      "name": "jos",
+      "email": "josseller@gmail.com",
+      "password": "$2a$12$fDZeh5TFOPAmljkHLdxLjeLwz6xPw3bG2dI1zc2Dg6tcTxhVr8aC6",
+      "phone": "9876582493",
+      "isAdmin": false,
+      "wishlist": [],
+      "createdAt": "2026-03-22T12:27:01.633Z"
+    },
+    {
+      "id": "55b4c810-34b3-4b17-9e84-7d31b4f67936",
+      "name": "nikhil",
+      "email": "nikhilpuppalwar16@gmail.com",
+      "password": "$2a$12$0J8AoFQemhs/pXiZZv7d6eSoDw05zbf1A8A7T6C.bOogi.EbWx59W",
+      "phone": "9370654064",
+      "isAdmin": false,
+      "wishlist": [],
+      "createdAt": "2026-04-16T18:10:05.249Z"
+    }
+  ],
+  "products": [
+    {
+      "id": "prod-003",
+      "title": "Royal Enfield Classic 350 — 2021",
+      "category": "Bikes",
+      "price": 145000,
+      "condition": "Good",
+      "description": "Royal Enfield Classic 350 (2021), Halcyon Black. 18,000 km driven. First service done at RE service centre. No modifications, stock condition. Runs perfectly. Selling because I moved cities and work from home now.",
+      "location": "Pune, Maharashtra",
+      "image": "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQHaRGvqs-T09HvvnU7BfzwKt4RoZ6t987tUg&s",
+      "seller": {
+        "id": "user-001",
+        "name": "Rahul Sharma",
+        "email": "rahul@example.com",
+        "phone": "+91 98765 43210"
+      },
+      "views": 77,
+      "isSold": false,
+      "featured": true,
+      "createdAt": "2024-03-03T12:00:00.000Z"
+    },
+    {
+      "id": "c44037c5-3cbf-4afb-aad5-49ef26ad946b",
+      "title": "Splender",
+      "category": "Bikes",
+      "price": 25000,
+      "condition": "Good",
+      "description": "This model is of 2013 with good condition",
+      "location": "Pune",
+      "image": "/uploads/item-1774202118039.jpg",
+      "seller": {
+        "id": "33167133-ccb5-49c6-b749-e7f2dd1cb730",
+        "name": "jos",
+        "email": "josseller@gmail.com",
+        "phone": "9518395675"
+      },
+      "views": 1,
+      "isSold": false,
+      "featured": false,
+      "createdAt": "2026-03-22T17:55:18.054Z"
+    },
+    {
+      "id": "9d754325-1c08-4fe7-b7f9-7a6a54d2a62e",
+      "title": "Honda Shine 125 CC",
+      "category": "Bikes",
+      "price": 45000,
+      "condition": "Fair",
+      "description": "Honda Shine 125 CC Model 2017 with good condition",
+      "location": "Nashik",
+      "image": "/uploads/item-1774256514749.jpg",
+      "seller": {
+        "id": "c9b57634-1388-4f40-ab47-e04f35955a01",
+        "name": "joy",
+        "email": "joyseller@gmail.com",
+        "phone": "8578943793"
+      },
+      "views": 1,
+      "isSold": false,
+      "featured": false,
+      "createdAt": "2026-03-23T09:01:54.761Z"
+    },
+    {
+      "id": "233a7fee-e35c-49c2-950d-4e7f33f37cc4",
+      "title": "Maruti Suzuki Ertiga",
+      "category": "Cars",
+      "price": 900000,
+      "condition": "Good",
+      "description": "Comfortable Seating: Spacious interiors with seating for up to 7 passengers and ample legroom, ensuring a relaxed journey for everyone.\r\nAir-Conditioned Comfort: Fully A/C vehicles to keep you cool, even during long drives, providing a comfortable environment.\r\nFuel-Efficient Performance: Economical fuel usage, making it perfect for both local and outstation trips, ensuring cost-effective travel.\r\nSpacious Boot Space: Ample boot space to carry luggage comfortably, whether you're on a family vacation or a business trip.",
+      "location": "Coimbatore",
+      "image": "/uploads/item-1774257539051.jpg",
+      "seller": {
+        "id": "c9b57634-1388-4f40-ab47-e04f35955a01",
+        "name": "joy",
+        "email": "joyseller@gmail.com",
+        "phone": "9876234561"
+      },
+      "views": 3,
+      "isSold": false,
+      "featured": false,
+      "createdAt": "2026-03-23T09:18:59.064Z"
+    }
+  ],
+  "inquiries": []
+}

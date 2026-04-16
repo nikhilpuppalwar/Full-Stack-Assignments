@@ -1,0 +1,1069 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="robots" content="noindex, nofollow">
+    <title>Admin Panel — Portfolio</title>
+
+    <!-- Auth Guard: block access without session token -->
+    <script>
+        (function () {
+            if (!sessionStorage.getItem('adminToken')) {
+                window.location.replace('/admin-login');
+            }
+        })();
+    </script>
+
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+
+    <style>
+        /* =============================================
+           CSS VARIABLES
+        ============================================= */
+        :root {
+            --primary:   #667eea;
+            --secondary: #764ba2;
+            --accent:    #f093fb;
+            --danger:    #f5576c;
+            --success:   #43e97b;
+            --bg:        #0a0e27;
+            --bg2:       #111428;
+            --card:      #161b35;
+            --card2:     #1c2240;
+            --text:      #ffffff;
+            --text2:     #9ca3c9;
+            --border:    rgba(255,255,255,0.08);
+            --gradient:  linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            --shadow:    0 8px 32px rgba(0,0,0,0.4);
+            --radius:    14px;
+            --transition: all 0.25s ease;
+        }
+
+        /* =============================================
+           BASE RESET
+        ============================================= */
+        *, *::before, *::after { margin: 0; padding: 0; box-sizing: border-box; }
+
+        body {
+            font-family: 'Inter', sans-serif;
+            background: var(--bg);
+            color: var(--text);
+            min-height: 100vh;
+        }
+
+        /* =============================================
+           HEADER
+        ============================================= */
+        .admin-header {
+            background: var(--bg2);
+            border-bottom: 1px solid var(--border);
+            padding: 1.1rem 2rem;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            position: sticky;
+            top: 0;
+            z-index: 200;
+            backdrop-filter: blur(12px);
+        }
+
+        .header-brand {
+            display: flex;
+            align-items: center;
+            gap: 0.75rem;
+        }
+
+        .header-brand .brand-icon {
+            width: 40px; height: 40px;
+            border-radius: 10px;
+            background: var(--gradient);
+            display: flex; align-items: center; justify-content: center;
+            font-size: 1.2rem;
+            box-shadow: 0 4px 15px rgba(102,126,234,0.35);
+        }
+
+        .header-brand h1 {
+            font-size: 1.3rem;
+            font-weight: 700;
+            background: var(--gradient);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+
+        .header-right {
+            display: flex;
+            align-items: center;
+            gap: 1rem;
+        }
+
+        .badge {
+            background: rgba(102,126,234,0.2);
+            color: var(--primary);
+            border: 1px solid rgba(102,126,234,0.35);
+            padding: 0.35rem 0.9rem;
+            border-radius: 20px;
+            font-size: 0.82rem;
+            font-weight: 600;
+        }
+
+        .logout-btn {
+            background: rgba(245,87,108,0.1);
+            color: #ff8fa3;
+            border: 1px solid rgba(245,87,108,0.3);
+            padding: 0.45rem 1rem;
+            border-radius: 8px;
+            font-size: 0.85rem;
+            font-weight: 600;
+            cursor: pointer;
+            font-family: 'Inter', sans-serif;
+            transition: var(--transition);
+        }
+        .logout-btn:hover { background: var(--danger); color: white; border-color: var(--danger); }
+
+        .back-link {
+            color: var(--text2);
+            text-decoration: none;
+            font-size: 0.88rem;
+            transition: var(--transition);
+        }
+        .back-link:hover { color: var(--primary); }
+
+        /* =============================================
+           TAB NAVIGATION
+        ============================================= */
+        .admin-nav {
+            background: var(--bg2);
+            border-bottom: 1px solid var(--border);
+            padding: 0 2rem;
+            display: flex;
+            gap: 0;
+            overflow-x: auto;
+        }
+
+        .tab-btn {
+            background: transparent;
+            border: none;
+            border-bottom: 3px solid transparent;
+            color: var(--text2);
+            padding: 1rem 1.4rem;
+            font-size: 0.95rem;
+            font-weight: 600;
+            cursor: pointer;
+            transition: var(--transition);
+            white-space: nowrap;
+            font-family: 'Inter', sans-serif;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+        .tab-btn:hover { color: var(--text); background: rgba(255,255,255,0.03); }
+        .tab-btn.active {
+            color: var(--primary);
+            border-bottom-color: var(--primary);
+            background: rgba(102,126,234,0.06);
+        }
+
+        /* =============================================
+           MAIN LAYOUT
+        ============================================= */
+        .admin-main {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 2rem;
+        }
+
+        .tab-content { display: none; }
+        .tab-content.active {
+            display: block;
+            animation: fadeTab 0.3s ease;
+        }
+        @keyframes fadeTab {
+            from { opacity: 0; transform: translateY(8px); }
+            to   { opacity: 1; transform: translateY(0); }
+        }
+
+        /* =============================================
+           STAT CARDS
+        ============================================= */
+        .stats-bar {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 1.25rem;
+            margin-bottom: 2rem;
+        }
+
+        .stat-card {
+            background: var(--card);
+            border: 1px solid var(--border);
+            border-radius: var(--radius);
+            padding: 1.5rem;
+            text-align: center;
+            transition: var(--transition);
+            position: relative;
+            overflow: hidden;
+        }
+        .stat-card::before {
+            content: '';
+            position: absolute;
+            top: 0; left: 0; right: 0;
+            height: 3px;
+            background: var(--gradient);
+            opacity: 0;
+            transition: var(--transition);
+        }
+        .stat-card:hover { border-color: rgba(102,126,234,0.3); transform: translateY(-3px); box-shadow: var(--shadow); }
+        .stat-card:hover::before { opacity: 1; }
+
+        .stat-number {
+            font-size: 2.4rem;
+            font-weight: 800;
+            background: var(--gradient);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+            line-height: 1;
+            margin-bottom: 0.4rem;
+        }
+        .stat-label { color: var(--text2); font-size: 0.88rem; }
+
+        /* =============================================
+           TOOLBAR
+        ============================================= */
+        .toolbar {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 1.5rem;
+            flex-wrap: wrap;
+            gap: 1rem;
+        }
+
+        .toolbar h2 {
+            font-size: 1.3rem;
+            font-weight: 700;
+            color: var(--text);
+        }
+
+        .toolbar-actions { display: flex; gap: 0.75rem; }
+
+        /* =============================================
+           BUTTONS
+        ============================================= */
+        .btn {
+            padding: 0.6rem 1.3rem;
+            border-radius: 8px;
+            border: none;
+            cursor: pointer;
+            font-weight: 600;
+            font-size: 0.88rem;
+            transition: var(--transition);
+            font-family: 'Inter', sans-serif;
+            display: inline-flex;
+            align-items: center;
+            gap: 0.4rem;
+        }
+
+        .btn-primary {
+            background: var(--gradient);
+            color: white;
+            box-shadow: 0 4px 15px rgba(102,126,234,0.3);
+        }
+        .btn-primary:hover { opacity: 0.88; transform: translateY(-1px); }
+
+        .btn-danger { background: rgba(245,87,108,0.15); color: var(--danger); border: 1px solid rgba(245,87,108,0.3); }
+        .btn-danger:hover { background: var(--danger); color: white; border-color: var(--danger); }
+
+        .btn-ghost { background: transparent; color: var(--text2); border: 1px solid var(--border); }
+        .btn-ghost:hover { border-color: var(--primary); color: var(--primary); }
+
+        .btn-edit { background: rgba(102,126,234,0.12); color: var(--primary); border: 1px solid rgba(102,126,234,0.25); padding: 0.4rem 0.9rem; font-size: 0.82rem; }
+        .btn-edit:hover { background: var(--primary); color: white; }
+
+        .btn-del { background: rgba(245,87,108,0.1); color: var(--danger); border: 1px solid rgba(245,87,108,0.2); padding: 0.4rem 0.9rem; font-size: 0.82rem; }
+        .btn-del:hover { background: var(--danger); color: white; }
+
+        /* =============================================
+           TABLE (shared)
+        ============================================= */
+        .table-wrap {
+            background: var(--card);
+            border: 1px solid var(--border);
+            border-radius: var(--radius);
+            overflow: hidden;
+        }
+
+        .data-table {
+            width: 100%;
+            border-collapse: collapse;
+        }
+
+        .data-table thead {
+            background: rgba(102,126,234,0.08);
+            border-bottom: 1px solid var(--border);
+        }
+
+        .data-table th {
+            padding: 1rem 1.2rem;
+            text-align: left;
+            font-size: 0.78rem;
+            font-weight: 700;
+            color: var(--text2);
+            text-transform: uppercase;
+            letter-spacing: 0.07em;
+        }
+
+        .data-table tbody tr {
+            border-bottom: 1px solid var(--border);
+            transition: var(--transition);
+        }
+        .data-table tbody tr:last-child { border-bottom: none; }
+        .data-table tbody tr:hover { background: rgba(102,126,234,0.04); }
+
+        .data-table td { padding: 1rem 1.2rem; font-size: 0.92rem; vertical-align: middle; }
+
+        .sender-name { font-weight: 600; color: var(--text); }
+        .sender-email { color: var(--primary); font-size: 0.82rem; margin-top: 2px; }
+        .msg-text { color: var(--text2); line-height: 1.6; max-width: 380px; }
+        .msg-date { color: var(--text2); font-size: 0.82rem; white-space: nowrap; }
+
+        /* Project thumbnail */
+        .thumb {
+            width: 80px; height: 52px;
+            object-fit: cover;
+            border-radius: 6px;
+            display: block;
+            background: var(--bg2);
+        }
+        .thumb-placeholder {
+            width: 80px; height: 52px;
+            border-radius: 6px;
+            background: linear-gradient(135deg, rgba(102,126,234,0.2), rgba(118,75,162,0.2));
+            display: flex; align-items: center; justify-content: center;
+            font-size: 1.2rem;
+            color: var(--text2);
+        }
+
+        .proj-title { font-weight: 600; color: var(--text); }
+        .proj-tags { display: flex; flex-wrap: wrap; gap: 4px; margin-top: 5px; }
+        .proj-tag {
+            background: rgba(102,126,234,0.12);
+            color: var(--primary);
+            padding: 2px 8px;
+            border-radius: 20px;
+            font-size: 0.73rem;
+            font-weight: 500;
+        }
+
+        .row-actions { display: flex; gap: 0.5rem; align-items: center; }
+
+        /* Fade-out on delete */
+        .row-exit {
+            opacity: 0;
+            transform: translateX(20px);
+            transition: all 0.35s ease;
+        }
+
+        /* =============================================
+           STATES
+        ============================================= */
+        .loading-state {
+            text-align: center;
+            padding: 4rem 2rem;
+            color: var(--text2);
+        }
+        .spinner {
+            width: 48px; height: 48px;
+            border: 3px solid var(--border);
+            border-top-color: var(--primary);
+            border-radius: 50%;
+            animation: spin 0.7s linear infinite;
+            margin: 0 auto 1rem;
+        }
+        @keyframes spin { to { transform: rotate(360deg); } }
+
+        .empty-state {
+            text-align: center;
+            padding: 4rem 2rem;
+            background: var(--card);
+            border-radius: var(--radius);
+            border: 1px solid var(--border);
+        }
+        .empty-icon { font-size: 3.5rem; margin-bottom: 1rem; }
+        .empty-state h3 { font-size: 1.3rem; margin-bottom: 0.5rem; }
+        .empty-state p { color: var(--text2); }
+
+        .error-state {
+            background: rgba(245,87,108,0.07);
+            border: 1px solid rgba(245,87,108,0.3);
+            border-radius: var(--radius);
+            padding: 2rem;
+            text-align: center;
+        }
+        .error-state h3 { color: var(--danger); margin-bottom: 0.5rem; }
+        .error-state p { color: var(--text2); }
+
+        /* =============================================
+           TOAST
+        ============================================= */
+        .toast {
+            position: fixed;
+            bottom: 2rem; right: 2rem;
+            padding: 0.9rem 1.4rem;
+            border-radius: 10px;
+            font-weight: 600;
+            font-size: 0.92rem;
+            z-index: 9999;
+            transform: translateY(120px);
+            opacity: 0;
+            transition: all 0.35s cubic-bezier(0.4, 0, 0.2, 1);
+            max-width: 340px;
+        }
+        .toast.show { transform: translateY(0); opacity: 1; }
+        .toast.success { background: linear-gradient(135deg, #43e97b, #38f9d7); color: #0a0e27; }
+        .toast.error   { background: linear-gradient(135deg, #f5576c, #f093fb); color: white; }
+
+        /* =============================================
+           MODAL OVERLAY
+        ============================================= */
+        .modal-overlay {
+            position: fixed;
+            inset: 0;
+            background: rgba(0,0,0,0.75);
+            display: none;
+            align-items: center;
+            justify-content: center;
+            z-index: 1000;
+            backdrop-filter: blur(6px);
+            padding: 1rem;
+        }
+        .modal-overlay.show { display: flex; animation: fadeInOverlay 0.2s ease; }
+        @keyframes fadeInOverlay { from { opacity: 0; } to { opacity: 1; } }
+
+        .modal-card {
+            background: var(--card2);
+            border: 1px solid rgba(102,126,234,0.2);
+            border-radius: 20px;
+            width: 100%;
+            max-width: 580px;
+            max-height: 92vh;
+            overflow-y: auto;
+            box-shadow: 0 25px 60px rgba(0,0,0,0.6);
+            animation: slideModal 0.3s cubic-bezier(0.4,0,0.2,1);
+        }
+        @keyframes slideModal {
+            from { opacity: 0; transform: translateY(30px) scale(0.97); }
+            to   { opacity: 1; transform: translateY(0) scale(1); }
+        }
+
+        .modal-header {
+            padding: 1.5rem 1.8rem 0;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+        .modal-header h2 { font-size: 1.3rem; font-weight: 700; }
+        .modal-close {
+            width: 32px; height: 32px;
+            border-radius: 8px;
+            background: var(--border);
+            border: none;
+            color: var(--text2);
+            font-size: 1.1rem;
+            cursor: pointer;
+            display: flex; align-items: center; justify-content: center;
+            transition: var(--transition);
+        }
+        .modal-close:hover { background: rgba(245,87,108,0.3); color: var(--danger); }
+
+        .modal-body { padding: 1.5rem 1.8rem; }
+        .modal-footer { padding: 0 1.8rem 1.8rem; display: flex; gap: 0.75rem; justify-content: flex-end; }
+
+        /* Form inputs */
+        .form-group { margin-bottom: 1.2rem; }
+        .form-label {
+            display: block;
+            font-size: 0.82rem;
+            font-weight: 600;
+            color: var(--text2);
+            text-transform: uppercase;
+            letter-spacing: 0.06em;
+            margin-bottom: 0.5rem;
+        }
+        .form-input, .form-textarea {
+            width: 100%;
+            background: rgba(10,14,39,0.7);
+            border: 1.5px solid var(--border);
+            color: var(--text);
+            padding: 0.75rem 1rem;
+            border-radius: 9px;
+            font-family: 'Inter', sans-serif;
+            font-size: 0.92rem;
+            transition: var(--transition);
+            outline: none;
+        }
+        .form-input::placeholder, .form-textarea::placeholder { color: rgba(255,255,255,0.18); }
+        .form-input:focus, .form-textarea:focus {
+            border-color: var(--primary);
+            background: rgba(10,14,39,0.9);
+            box-shadow: 0 0 0 3px rgba(102,126,234,0.15);
+        }
+        .form-textarea { resize: vertical; min-height: 100px; }
+
+        /* Image preview */
+        .img-preview-wrap { margin-top: 0.75rem; }
+        .img-preview {
+            width: 100%;
+            height: 120px;
+            object-fit: cover;
+            border-radius: 8px;
+            border: 1px solid var(--border);
+            display: none;
+        }
+        .img-preview.visible { display: block; }
+
+        /* =============================================
+           CONFIRM DIALOG
+        ============================================= */
+        .confirm-overlay {
+            position: fixed; inset: 0;
+            background: rgba(0,0,0,0.75);
+            display: none; align-items: center; justify-content: center;
+            z-index: 2000; backdrop-filter: blur(4px);
+        }
+        .confirm-overlay.show { display: flex; }
+        .confirm-box {
+            background: var(--card2);
+            border: 1px solid rgba(245,87,108,0.2);
+            border-radius: var(--radius);
+            padding: 2rem;
+            max-width: 400px; width: 90%;
+            text-align: center;
+            animation: slideModal 0.25s ease;
+        }
+        .confirm-icon { font-size: 2.5rem; margin-bottom: 1rem; }
+        .confirm-box h3 { font-size: 1.2rem; margin-bottom: 0.6rem; color: var(--danger); }
+        .confirm-box p { color: var(--text2); margin-bottom: 1.5rem; line-height: 1.6; font-size: 0.92rem; }
+        .confirm-actions { display: flex; gap: 0.75rem; justify-content: center; }
+
+        /* =============================================
+           RESPONSIVE
+        ============================================= */
+        @media (max-width: 768px) {
+            .admin-main { padding: 1.2rem; }
+            .stats-bar { grid-template-columns: 1fr 1fr; }
+            .admin-header { gap: 1rem; flex-wrap: wrap; }
+            .data-table th, .data-table td { padding: 0.75rem 0.8rem; }
+            .msg-text { max-width: 180px; }
+            .thumb, .thumb-placeholder { width: 60px; height: 40px; }
+        }
+        @media (max-width: 480px) {
+            .stats-bar { grid-template-columns: 1fr; }
+            .header-right { gap: 0.5rem; }
+            .badge { display: none; }
+        }
+    </style>
+</head>
+
+<body>
+
+<!-- Toast -->
+<div id="toast" class="toast" role="alert"></div>
+
+<!-- Confirm Delete Dialog -->
+<div class="confirm-overlay" id="confirmOverlay">
+    <div class="confirm-box">
+        <div class="confirm-icon" id="confirmIcon">🗑️</div>
+        <h3 id="confirmTitle">Delete?</h3>
+        <p id="confirmMsg">This action cannot be undone.</p>
+        <div class="confirm-actions">
+            <button class="btn btn-ghost" id="confirmCancelBtn">Cancel</button>
+            <button class="btn btn-danger"  id="confirmOkBtn">Delete</button>
+        </div>
+    </div>
+</div>
+
+<!-- Project Add/Edit Modal -->
+<div class="modal-overlay" id="projectModal">
+    <div class="modal-card">
+        <div class="modal-header">
+            <h2 id="modalTitle">➕ Add Project</h2>
+            <button class="modal-close" id="modalCloseBtn" title="Close">✕</button>
+        </div>
+        <div class="modal-body">
+            <form id="projectForm" autocomplete="off">
+                <input type="hidden" id="projId">
+                <div class="form-group">
+                    <label class="form-label">Project Title *</label>
+                    <input class="form-input" type="text" id="projTitle" placeholder="e.g. WhatsApp Clone" required>
+                </div>
+                <div class="form-group">
+                    <label class="form-label">Description *</label>
+                    <textarea class="form-textarea" id="projDesc" placeholder="Brief description of the project..." required></textarea>
+                </div>
+                <div class="form-group">
+                    <label class="form-label">Tech Stack * (comma separated)</label>
+                    <input class="form-input" type="text" id="projTech" placeholder="Kotlin, Firebase, MVVM" required>
+                </div>
+                <div class="form-group">
+                    <label class="form-label">GitHub Repository URL</label>
+                    <input class="form-input" type="url" id="projGithub" placeholder="https://github.com/username/repo">
+                </div>
+                <div class="form-group">
+                    <label class="form-label">Image Path (optional)</label>
+                    <input class="form-input" type="text" id="projImage" placeholder="/project_image/filename.jpg">
+                    <div class="img-preview-wrap">
+                        <img class="img-preview" id="imgPreview" alt="Preview">
+                    </div>
+                </div>
+            </form>
+        </div>
+        <div class="modal-footer">
+            <button class="btn btn-ghost" id="cancelProjectBtn">Cancel</button>
+            <button class="btn btn-primary" id="saveProjectBtn">💾 Save Project</button>
+        </div>
+    </div>
+</div>
+
+<!-- ===== HEADER ===== -->
+<header class="admin-header">
+    <div class="header-brand">
+        <div class="brand-icon">🛡️</div>
+        <h1>Admin Panel</h1>
+    </div>
+    <div class="header-right">
+        <span class="badge" id="msgBadge">0 Messages</span>
+        <a href="/" class="back-link">← Portfolio</a>
+        <button class="logout-btn" id="logoutBtn">🔒 Logout</button>
+    </div>
+</header>
+
+<!-- ===== TAB NAVIGATION ===== -->
+<nav class="admin-nav">
+    <button class="tab-btn active" id="tab-btn-messages" onclick="switchTab('messages')">📬 Messages</button>
+    <button class="tab-btn" id="tab-btn-projects" onclick="switchTab('projects')">🚀 Manage Projects</button>
+</nav>
+
+<!-- ===== MAIN ===== -->
+<main class="admin-main">
+
+    <!-- ======= MESSAGES TAB ======= -->
+    <div class="tab-content active" id="tab-messages">
+
+        <!-- Stats -->
+        <div class="stats-bar">
+            <div class="stat-card">
+                <div class="stat-number" id="totalMessages">—</div>
+                <div class="stat-label">Total Messages</div>
+            </div>
+            <div class="stat-card">
+                <div class="stat-number" id="todayMessages">—</div>
+                <div class="stat-label">Received Today</div>
+            </div>
+            <div class="stat-card">
+                <div class="stat-number" id="latestSender" style="font-size:1.5rem;">—</div>
+                <div class="stat-label">Latest From</div>
+            </div>
+        </div>
+
+        <!-- Toolbar -->
+        <div class="toolbar">
+            <h2>📬 Contact Messages</h2>
+            <div class="toolbar-actions">
+                <button class="btn btn-ghost" id="refreshMsgBtn">↻ Refresh</button>
+            </div>
+        </div>
+
+        <!-- Messages Container -->
+        <div id="messagesContainer">
+            <div class="loading-state">
+                <div class="spinner"></div>
+                <p>Loading messages...</p>
+            </div>
+        </div>
+
+    </div> <!-- /tab-messages -->
+
+    <!-- ======= PROJECTS TAB ======= -->
+    <div class="tab-content" id="tab-projects">
+
+        <div class="toolbar">
+            <h2>🚀 Portfolio Projects</h2>
+            <div class="toolbar-actions">
+                <button class="btn btn-ghost" onclick="loadProjectsAdmin()">↻ Refresh</button>
+                <button class="btn btn-primary" onclick="openProjectModal()">+ Add Project</button>
+            </div>
+        </div>
+
+        <div id="projectsContainer">
+            <div class="loading-state">
+                <div class="spinner"></div>
+                <p>Loading projects...</p>
+            </div>
+        </div>
+
+    </div> <!-- /tab-projects -->
+
+</main>
+
+<script>
+// =============================================================
+// ADMIN PANEL SCRIPT
+// =============================================================
+
+/* ---------- AUTH ---------- */
+document.getElementById('logoutBtn').addEventListener('click', () => {
+    sessionStorage.removeItem('adminToken');
+    sessionStorage.removeItem('adminGranted');
+    window.location.href = '/admin-login';
+});
+
+/* ---------- TOAST ---------- */
+function showToast(msg, type = 'success') {
+    const t = document.getElementById('toast');
+    t.textContent = msg;
+    t.className = `toast ${type} show`;
+    setTimeout(() => { t.className = 'toast'; }, 3500);
+}
+
+/* ---------- ESCAPE HTML ---------- */
+function esc(str) {
+    const d = document.createElement('div');
+    d.textContent = String(str);
+    return d.innerHTML;
+}
+
+/* =============================================================
+   TABS
+============================================================= */
+let projectsLoaded = false;
+
+function switchTab(name) {
+    document.querySelectorAll('.tab-btn').forEach(b => b.classList.remove('active'));
+    document.querySelectorAll('.tab-content').forEach(c => c.classList.remove('active'));
+    document.getElementById(`tab-btn-${name}`).classList.add('active');
+    document.getElementById(`tab-${name}`).classList.add('active');
+    if (name === 'projects' && !projectsLoaded) loadProjectsAdmin();
+}
+
+/* =============================================================
+   CONFIRM DIALOG (reusable)
+============================================================= */
+let confirmCallback = null;
+
+function showConfirm(title, msg, icon = '🗑️') {
+    return new Promise(resolve => {
+        document.getElementById('confirmIcon').textContent = icon;
+        document.getElementById('confirmTitle').textContent = title;
+        document.getElementById('confirmMsg').textContent = msg;
+        const overlay = document.getElementById('confirmOverlay');
+        overlay.classList.add('show');
+        confirmCallback = resolve;
+    });
+}
+
+document.getElementById('confirmOkBtn').addEventListener('click', () => {
+    document.getElementById('confirmOverlay').classList.remove('show');
+    if (confirmCallback) confirmCallback(true);
+    confirmCallback = null;
+});
+
+document.getElementById('confirmCancelBtn').addEventListener('click', () => {
+    document.getElementById('confirmOverlay').classList.remove('show');
+    if (confirmCallback) confirmCallback(false);
+    confirmCallback = null;
+});
+
+/* =============================================================
+   MESSAGES
+============================================================= */
+document.getElementById('refreshMsgBtn').addEventListener('click', () => {
+    loadMessages();
+    showToast('🔄 Refreshing messages...');
+});
+
+async function loadMessages() {
+    const c = document.getElementById('messagesContainer');
+    c.innerHTML = '<div class="loading-state"><div class="spinner"></div><p>Loading messages...</p></div>';
+    try {
+        const res = await fetch('/contact/messages');
+        const data = await res.json();
+        if (!res.ok) throw new Error(data.message || 'Failed');
+        updateMsgStats(data.data);
+        if (data.data.length === 0) {
+            c.innerHTML = `<div class="empty-state"><div class="empty-icon">📭</div><h3>No messages yet</h3><p>Contact form submissions will appear here.</p></div>`;
+        } else {
+            renderMessagesTable(data.data);
+        }
+    } catch (err) {
+        c.innerHTML = `<div class="error-state"><h3>⚠️ Error</h3><p>${esc(err.message)}</p></div>`;
+    }
+}
+
+function updateMsgStats(msgs) {
+    const total = msgs.length;
+    document.getElementById('totalMessages').textContent = total;
+    document.getElementById('msgBadge').textContent = `${total} Message${total !== 1 ? 's' : ''}`;
+    const today = new Date().toDateString();
+    document.getElementById('todayMessages').textContent =
+        msgs.filter(m => new Date(m.date).toDateString() === today).length;
+    document.getElementById('latestSender').textContent =
+        total > 0 ? msgs[0].name.split(' ')[0] : '—';
+}
+
+function renderMessagesTable(msgs) {
+    const rows = msgs.map(m => {
+        const date = new Date(m.date).toLocaleString('en-IN', {
+            day: '2-digit', month: 'short', year: 'numeric', hour: '2-digit', minute: '2-digit'
+        });
+        return `<tr id="msg-${m._id}">
+            <td>
+                <div class="sender-name">${esc(m.name)}</div>
+                <div class="sender-email">${esc(m.email)}</div>
+            </td>
+            <td><div class="msg-text">${esc(m.message)}</div></td>
+            <td><div class="msg-date">${date}</div></td>
+            <td>
+                <div class="row-actions">
+                    <button class="btn btn-del" onclick="deleteMessage('${m._id}')">🗑️ Delete</button>
+                </div>
+            </td>
+        </tr>`;
+    }).join('');
+
+    document.getElementById('messagesContainer').innerHTML = `
+        <div class="table-wrap">
+            <table class="data-table">
+                <thead>
+                    <tr>
+                        <th>Sender</th><th>Message</th><th>Date & Time</th><th>Action</th>
+                    </tr>
+                </thead>
+                <tbody>${rows}</tbody>
+            </table>
+        </div>`;
+}
+
+async function deleteMessage(id) {
+    const ok = await showConfirm('Delete Message?', 'This message will be permanently removed.', '🗑️');
+    if (!ok) return;
+    try {
+        const res = await fetch(`/contact/messages/${id}`, { method: 'DELETE' });
+        if (!res.ok) throw new Error('Deletion failed');
+        const row = document.getElementById(`msg-${id}`);
+        if (row) {
+            row.classList.add('row-exit');
+            setTimeout(() => { row.remove(); loadMessages(); }, 350);
+        }
+        showToast('✅ Message deleted!');
+    } catch (err) {
+        showToast(`❌ ${err.message}`, 'error');
+    }
+}
+
+/* =============================================================
+   PROJECTS
+============================================================= */
+let allProjects = [];
+
+async function loadProjectsAdmin() {
+    projectsLoaded = true;
+    const c = document.getElementById('projectsContainer');
+    c.innerHTML = '<div class="loading-state"><div class="spinner"></div><p>Loading projects...</p></div>';
+    try {
+        const res = await fetch('/projects');
+        const data = await res.json();
+        if (!res.ok) throw new Error(data.message || 'Failed');
+        allProjects = data.data;
+        if (allProjects.length === 0) {
+            c.innerHTML = `<div class="empty-state"><div class="empty-icon">📂</div><h3>No projects</h3><p>Click "+ Add Project" to add your first portfolio project.</p></div>`;
+        } else {
+            renderProjectsTable(allProjects);
+        }
+    } catch (err) {
+        c.innerHTML = `<div class="error-state"><h3>⚠️ Error</h3><p>${esc(err.message)}</p></div>`;
+    }
+}
+
+function renderProjectsTable(projects) {
+    const rows = projects.map(p => {
+        const tags = (p.techStack || []).slice(0, 4).map(t => `<span class="proj-tag">${esc(t)}</span>`).join('');
+        const img = p.imageUrl
+            ? `<img class="thumb" src="${esc(p.imageUrl)}" alt="${esc(p.title)}" loading="lazy">`
+            : `<div class="thumb-placeholder">🖼️</div>`;
+        return `<tr id="proj-${p._id}">
+            <td>${img}</td>
+            <td>
+                <div class="proj-title">${esc(p.title)}</div>
+                <div class="proj-tags">${tags}</div>
+            </td>
+            <td style="max-width:260px; color:var(--text2); font-size:0.85rem; line-height:1.5;">
+                ${esc((p.description || '').substring(0, 100))}${p.description && p.description.length > 100 ? '…' : ''}
+            </td>
+            <td>
+                ${p.githubLink ? `<a href="${esc(p.githubLink)}" target="_blank" style="color:var(--primary); font-size:0.85rem; text-decoration:none;">↗ Repo</a>` : '—'}
+            </td>
+            <td>
+                <div class="row-actions">
+                    <button class="btn btn-edit" onclick="openProjectModal('${p._id}')">✏️ Edit</button>
+                    <button class="btn btn-del"  onclick="deleteProject('${p._id}')">🗑️</button>
+                </div>
+            </td>
+        </tr>`;
+    }).join('');
+
+    document.getElementById('projectsContainer').innerHTML = `
+        <div class="table-wrap">
+            <table class="data-table">
+                <thead>
+                    <tr>
+                        <th>Image</th>
+                        <th>Title & Stack</th>
+                        <th>Description</th>
+                        <th>Repo</th>
+                        <th>Actions</th>
+                    </tr>
+                </thead>
+                <tbody>${rows}</tbody>
+            </table>
+        </div>`;
+}
+
+/* ---------- PROJECT MODAL ---------- */
+const projectModal = document.getElementById('projectModal');
+const projectForm  = document.getElementById('projectForm');
+const imgPreview   = document.getElementById('imgPreview');
+const projImageInput = document.getElementById('projImage');
+
+function openProjectModal(id = null) {
+    projectForm.reset();
+    document.getElementById('projId').value = '';
+    document.getElementById('modalTitle').textContent = '➕ Add Project';
+    imgPreview.classList.remove('visible');
+    imgPreview.src = '';
+
+    if (id) {
+        document.getElementById('modalTitle').textContent = '✏️ Edit Project';
+        const proj = allProjects.find(p => p._id === id);
+        if (proj) {
+            document.getElementById('projId').value    = proj._id;
+            document.getElementById('projTitle').value = proj.title;
+            document.getElementById('projDesc').value  = proj.description;
+            document.getElementById('projTech').value  = (proj.techStack || []).join(', ');
+            document.getElementById('projGithub').value = proj.githubLink || '';
+            document.getElementById('projImage').value  = proj.imageUrl || '';
+            if (proj.imageUrl) {
+                imgPreview.src = proj.imageUrl;
+                imgPreview.classList.add('visible');
+            }
+        }
+    }
+    projectModal.classList.add('show');
+    setTimeout(() => document.getElementById('projTitle').focus(), 100);
+}
+
+function closeProjectModal() {
+    projectModal.classList.remove('show');
+}
+
+// Live image preview
+projImageInput.addEventListener('input', () => {
+    const val = projImageInput.value.trim();
+    if (val) {
+        imgPreview.src = val;
+        imgPreview.classList.add('visible');
+    } else {
+        imgPreview.classList.remove('visible');
+    }
+});
+
+document.getElementById('modalCloseBtn').addEventListener('click', closeProjectModal);
+document.getElementById('cancelProjectBtn').addEventListener('click', closeProjectModal);
+projectModal.addEventListener('click', e => { if (e.target === projectModal) closeProjectModal(); });
+
+/* ---------- SAVE PROJECT ---------- */
+document.getElementById('saveProjectBtn').addEventListener('click', saveProject);
+
+async function saveProject() {
+    const id    = document.getElementById('projId').value;
+    const title = document.getElementById('projTitle').value.trim();
+    const desc  = document.getElementById('projDesc').value.trim();
+    const tech  = document.getElementById('projTech').value.trim();
+
+    if (!title || !desc || !tech) {
+        showToast('⚠️ Please fill in all required (*) fields.', 'error');
+        return;
+    }
+
+    const btn = document.getElementById('saveProjectBtn');
+    btn.disabled = true;
+    btn.textContent = 'Saving...';
+
+    const payload = {
+        title,
+        description: desc,
+        techStack:   tech.split(',').map(s => s.trim()).filter(Boolean),
+        githubLink:  document.getElementById('projGithub').value.trim(),
+        imageUrl:    document.getElementById('projImage').value.trim()
+    };
+
+    const method = id ? 'PUT' : 'POST';
+    const url    = id ? `/projects/${id}` : '/projects';
+
+    try {
+        const res = await fetch(url, {
+            method,
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify(payload)
+        });
+        const data = await res.json();
+        if (!res.ok) throw new Error(data.message || 'Save failed');
+        showToast(id ? '✅ Project updated!' : '✅ Project added!');
+        closeProjectModal();
+        loadProjectsAdmin();
+    } catch (err) {
+        showToast(`❌ ${err.message}`, 'error');
+    } finally {
+        btn.disabled = false;
+        btn.textContent = '💾 Save Project';
+    }
+}
+
+/* ---------- DELETE PROJECT ---------- */
+async function deleteProject(id) {
+    const proj = allProjects.find(p => p._id === id);
+    const ok = await showConfirm(
+        `Delete "${proj ? proj.title : 'Project'}"?`,
+        'This project will be permanently removed from your portfolio.',
+        '🗑️'
+    );
+    if (!ok) return;
+    try {
+        const res = await fetch(`/projects/${id}`, { method: 'DELETE' });
+        if (!res.ok) throw new Error('Deletion failed');
+        const row = document.getElementById(`proj-${id}`);
+        if (row) {
+            row.classList.add('row-exit');
+            setTimeout(() => { row.remove(); }, 350);
+        }
+        allProjects = allProjects.filter(p => p._id !== id);
+        showToast('✅ Project deleted!');
+    } catch (err) {
+        showToast(`❌ ${err.message}`, 'error');
+    }
+}
+
+/* ---------- KEYBOARD SHORTCUTS ---------- */
+document.addEventListener('keydown', e => {
+    if (e.key === 'Escape') closeProjectModal();
+});
+
+/* =============================================================
+   INIT
+============================================================= */
+loadMessages();
+</script>
+</body>
+</html>

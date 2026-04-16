@@ -1,0 +1,55 @@
+<%- include('../partials/header') %>
+<div class="page-banner">
+  <div class="container-fluid px-4">
+    <h1 class="page-banner-title"><i class="bi bi-send me-3"></i>Sent Messages</h1>
+    <p class="page-banner-sub">Inquiries you sent to sellers</p>
+  </div>
+</div>
+<section class="py-5">
+  <div class="container-fluid px-4">
+    <div class="row justify-content-center">
+      <div class="col-lg-8">
+        <div class="d-flex gap-3 mb-4">
+          <a href="/inquiries/inbox" class="btn btn-outline-secondary btn-sm">Inbox</a>
+          <a href="/inquiries/sent"  class="btn btn-accent btn-sm">Sent (<%= inquiries.length %>)</a>
+        </div>
+        <% if (inquiries.length===0) { %>
+        <div class="text-center py-5">
+          <i class="bi bi-send" style="font-size:3rem;color:#ddd;display:block;margin-bottom:16px"></i>
+          <h4>No sent messages</h4>
+          <a href="/products" class="btn btn-accent mt-3">Browse Listings</a>
+        </div>
+        <% } else { %>
+        <div class="d-flex flex-column gap-3">
+          <% inquiries.forEach(inq => { %>
+          <div class="inq-item">
+            <div class="inq-top">
+              <div class="inq-av sent-av"><i class="bi bi-send-fill"></i></div>
+              <div class="inq-info">
+                <span class="inq-name">To: <%= inq.recipientName || 'Seller' %></span>
+                <span class="inq-time"><%= new Date(inq.createdAt).toLocaleDateString('en-IN',{day:'numeric',month:'short',year:'numeric'}) %></span>
+              </div>
+              <% if (inq.product) { %>
+              <a href="/products/<%= inq.product.id %>" class="inq-prod-link">
+                <img src="<%= inq.product.image %>" alt="" onerror="this.src='https://via.placeholder.com/40x36'">
+                <span><%= inq.product.title.substring(0,35) %>…</span>
+              </a>
+              <% } else { %><span class="text-muted small">[Listing removed]</span><% } %>
+            </div>
+            <p class="inq-msg"><%= inq.message %></p>
+            <% if (inq.product) { %>
+            <div class="inq-foot">
+              <a href="/products/<%= inq.product.id %>" class="btn btn-outline-secondary btn-sm">
+                <i class="bi bi-box-arrow-up-right me-1"></i>View Listing
+              </a>
+            </div>
+            <% } %>
+          </div>
+          <% }) %>
+        </div>
+        <% } %>
+      </div>
+    </div>
+  </div>
+</section>
+<%- include('../partials/footer') %>

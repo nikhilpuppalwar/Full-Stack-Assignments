@@ -1,0 +1,597 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="robots" content="noindex, nofollow">
+    <title>Admin Access — Portfolio</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+    <style>
+        /* ===========================
+           CSS VARIABLES & RESET
+        =========================== */
+        :root {
+            --primary:   #667eea;
+            --secondary: #764ba2;
+            --bg:        #0a0e27;
+            --bg2:       #151932;
+            --card:      #1a1f3a;
+            --text:      #ffffff;
+            --text2:     #b8b9c9;
+            --danger:    #f5576c;
+            --success:   #43e97b;
+            --border:    rgba(255,255,255,0.1);
+            --gradient:  linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            --glow:      0 0 40px rgba(102, 126, 234, 0.35);
+            --shadow:    0 20px 60px rgba(0,0,0,0.5);
+        }
+
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+
+        html, body {
+            height: 100%;
+            font-family: 'Inter', sans-serif;
+            background: var(--bg);
+            color: var(--text);
+            overflow: hidden;
+        }
+
+        /* ===========================
+           ANIMATED BACKGROUND
+        =========================== */
+        .bg-orbs {
+            position: fixed;
+            inset: 0;
+            pointer-events: none;
+            z-index: 0;
+            overflow: hidden;
+        }
+
+        .orb {
+            position: absolute;
+            border-radius: 50%;
+            filter: blur(80px);
+            opacity: 0.25;
+            animation: driftOrb 18s infinite ease-in-out;
+        }
+
+        .orb-1 {
+            width: 600px; height: 600px;
+            background: radial-gradient(circle, #667eea, transparent);
+            top: -200px; left: -200px;
+            animation-delay: 0s;
+        }
+
+        .orb-2 {
+            width: 500px; height: 500px;
+            background: radial-gradient(circle, #764ba2, transparent);
+            bottom: -150px; right: -150px;
+            animation-delay: -6s;
+        }
+
+        .orb-3 {
+            width: 300px; height: 300px;
+            background: radial-gradient(circle, #f093fb, transparent);
+            top: 50%; left: 50%;
+            animation-delay: -12s;
+        }
+
+        @keyframes driftOrb {
+            0%, 100% { transform: translate(0, 0) scale(1); }
+            33%       { transform: translate(40px, -40px) scale(1.1); }
+            66%       { transform: translate(-30px, 30px) scale(0.95); }
+        }
+
+        /* ===========================
+           CENTRE LAYOUT
+        =========================== */
+        .page-center {
+            position: relative;
+            z-index: 1;
+            height: 100vh;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            padding: 2rem;
+        }
+
+        /* ===========================
+           CARD
+        =========================== */
+        .login-card {
+            background: rgba(26, 31, 58, 0.85);
+            backdrop-filter: blur(20px);
+            -webkit-backdrop-filter: blur(20px);
+            border: 1px solid rgba(102, 126, 234, 0.25);
+            border-radius: 24px;
+            padding: 3rem 2.5rem;
+            width: 100%;
+            max-width: 420px;
+            box-shadow: var(--shadow);
+            animation: slideUp 0.6s cubic-bezier(0.4, 0, 0.2, 1);
+        }
+
+        @keyframes slideUp {
+            from { opacity: 0; transform: translateY(30px); }
+            to   { opacity: 1; transform: translateY(0); }
+        }
+
+        /* ===========================
+           LOCK ICON HEADER
+        =========================== */
+        .lock-ring {
+            width: 80px;
+            height: 80px;
+            border-radius: 50%;
+            background: var(--gradient);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin: 0 auto 1.5rem;
+            font-size: 2rem;
+            box-shadow: var(--glow);
+            animation: pulseLock 3s infinite ease-in-out;
+        }
+
+        @keyframes pulseLock {
+            0%, 100% { box-shadow: 0 0 20px rgba(102,126,234,0.4); }
+            50%       { box-shadow: 0 0 50px rgba(102,126,234,0.7); }
+        }
+
+        .card-title {
+            text-align: center;
+            font-size: 1.6rem;
+            font-weight: 700;
+            background: var(--gradient);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+            margin-bottom: 0.5rem;
+        }
+
+        .card-subtitle {
+            text-align: center;
+            color: var(--text2);
+            font-size: 0.95rem;
+            margin-bottom: 2.5rem;
+            line-height: 1.5;
+        }
+
+        /* ===========================
+           FORM
+        =========================== */
+        .form-label {
+            display: block;
+            font-size: 0.85rem;
+            font-weight: 600;
+            color: var(--text2);
+            text-transform: uppercase;
+            letter-spacing: 0.08em;
+            margin-bottom: 0.6rem;
+        }
+
+        .input-wrap {
+            position: relative;
+            margin-bottom: 1.5rem;
+        }
+
+        .code-input {
+            width: 100%;
+            background: rgba(10, 14, 39, 0.7);
+            border: 2px solid rgba(255,255,255,0.1);
+            border-radius: 12px;
+            padding: 0.95rem 3rem 0.95rem 1.2rem;
+            color: var(--text);
+            font-size: 1.05rem;
+            font-family: 'Inter', monospace;
+            letter-spacing: 0.1em;
+            outline: none;
+            transition: all 0.3s ease;
+        }
+
+        .code-input::placeholder { color: rgba(255,255,255,0.2); letter-spacing: 0.05em; }
+
+        .code-input:focus {
+            border-color: var(--primary);
+            background: rgba(10, 14, 39, 0.9);
+            box-shadow: 0 0 0 3px rgba(102,126,234,0.2);
+        }
+
+        /* Toggle show/hide password */
+        .toggle-eye {
+            position: absolute;
+            right: 1rem;
+            top: 50%;
+            transform: translateY(-50%);
+            background: none;
+            border: none;
+            color: var(--text2);
+            cursor: pointer;
+            font-size: 1.2rem;
+            padding: 0;
+            line-height: 1;
+            transition: color 0.2s;
+        }
+
+        .toggle-eye:hover { color: var(--primary); }
+
+        /* ===========================
+           SUBMIT BUTTON
+        =========================== */
+        .access-btn {
+            width: 100%;
+            padding: 1rem;
+            border-radius: 12px;
+            border: none;
+            background: var(--gradient);
+            color: white;
+            font-size: 1rem;
+            font-weight: 700;
+            font-family: 'Inter', sans-serif;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            letter-spacing: 0.03em;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .access-btn::after {
+            content: '';
+            position: absolute;
+            inset: 0;
+            background: rgba(255,255,255,0);
+            transition: background 0.2s;
+        }
+
+        .access-btn:hover:not(:disabled)::after { background: rgba(255,255,255,0.08); }
+        .access-btn:hover:not(:disabled) { transform: translateY(-2px); box-shadow: var(--glow); }
+        .access-btn:active:not(:disabled) { transform: translateY(0); }
+
+        .access-btn:disabled {
+            opacity: 0.7;
+            cursor: not-allowed;
+            transform: none;
+        }
+
+        /* ===========================
+           ALERT MESSAGES
+        =========================== */
+        .alert {
+            padding: 0.9rem 1.2rem;
+            border-radius: 10px;
+            font-size: 0.9rem;
+            font-weight: 500;
+            margin-bottom: 1.5rem;
+            display: none;
+            align-items: center;
+            gap: 0.6rem;
+            animation: fadeIn 0.3s ease;
+        }
+
+        @keyframes fadeIn { from { opacity: 0; transform: translateY(-6px); } to { opacity: 1; } }
+
+        .alert.show { display: flex; }
+
+        .alert-error {
+            background: rgba(245, 87, 108, 0.15);
+            border: 1px solid rgba(245, 87, 108, 0.4);
+            color: #ff8fa3;
+        }
+
+        .alert-success {
+            background: rgba(67, 233, 123, 0.15);
+            border: 1px solid rgba(67, 233, 123, 0.4);
+            color: var(--success);
+        }
+
+        /* Shake animation on wrong code */
+        .shake {
+            animation: shakeCard 0.5s cubic-bezier(0.36, 0.07, 0.19, 0.97);
+        }
+
+        @keyframes shakeCard {
+            0%, 100% { transform: translateX(0); }
+            15%       { transform: translateX(-10px); }
+            30%       { transform: translateX(8px); }
+            45%       { transform: translateX(-8px); }
+            60%       { transform: translateX(6px); }
+            75%       { transform: translateX(-4px); }
+            90%       { transform: translateX(3px); }
+        }
+
+        /* ===========================
+           ATTEMPT COUNTER
+        =========================== */
+        .attempt-info {
+            text-align: center;
+            font-size: 0.8rem;
+            color: rgba(255,255,255,0.25);
+            margin-top: 1.5rem;
+        }
+
+        .attempt-info span { color: var(--danger); font-weight: 600; }
+
+        /* ===========================
+           BACK LINK
+        =========================== */
+        .back-link {
+            display: block;
+            text-align: center;
+            margin-top: 1.5rem;
+            color: var(--text2);
+            text-decoration: none;
+            font-size: 0.9rem;
+            transition: color 0.2s;
+        }
+
+        .back-link:hover { color: var(--primary); }
+
+        /* Success check  animation */
+        .success-check {
+            display: none;
+            text-align: center;
+            font-size: 3.5rem;
+            animation: bounceIn 0.6s ease;
+        }
+
+        @keyframes bounceIn {
+            0%   { transform: scale(0.3); opacity: 0; }
+            50%  { transform: scale(1.1); }
+            70%  { transform: scale(0.95); }
+            100% { transform: scale(1); opacity: 1; }
+        }
+
+        @media (max-width: 480px) {
+            .login-card { padding: 2rem 1.5rem; }
+            .card-title { font-size: 1.4rem; }
+        }
+    </style>
+</head>
+
+<body>
+    <!-- Animated background orbs -->
+    <div class="bg-orbs">
+        <div class="orb orb-1"></div>
+        <div class="orb orb-2"></div>
+        <div class="orb orb-3"></div>
+    </div>
+
+    <div class="page-center">
+        <div class="login-card" id="loginCard">
+
+            <!-- Lock Icon -->
+            <div class="lock-ring" id="lockRing">🔒</div>
+
+            <!-- Title -->
+            <h1 class="card-title">Admin Access</h1>
+            <p class="card-subtitle">Enter the secret code to access the admin panel</p>
+
+            <!-- Success check (shown after correct code) -->
+            <div class="success-check" id="successCheck">✅</div>
+
+            <!-- Error Alert -->
+            <div class="alert alert-error" id="errorAlert" role="alert">
+                <span>⚠️</span>
+                <span id="errorMsg">Invalid secret code. Try again.</span>
+            </div>
+
+            <!-- Login Form -->
+            <form id="loginForm" autocomplete="off">
+                <label class="form-label" for="secretCode">Secret Code</label>
+                <div class="input-wrap">
+                    <input
+                        type="password"
+                        id="secretCode"
+                        class="code-input"
+                        placeholder="Enter secret code..."
+                        autocomplete="new-password"
+                        spellcheck="false"
+                        maxlength="64"
+                        required
+                    >
+                    <button type="button" class="toggle-eye" id="toggleEye" title="Show/hide code" aria-label="Toggle visibility">
+                        👁️
+                    </button>
+                </div>
+
+                <button type="submit" class="access-btn" id="accessBtn">
+                    <span id="btnText">🔓 Unlock Admin Panel</span>
+                </button>
+            </form>
+
+            <p class="attempt-info" id="attemptInfo"></p>
+
+            <a href="/" class="back-link" id="backLink">← Back to Portfolio</a>
+        </div>
+    </div>
+
+    <script>
+        // ============================================================
+        // ADMIN LOGIN — Script
+        // Calls POST /verify-admin with the entered secret code.
+        // On success, stores a session token in sessionStorage,
+        // then redirects to /admin.
+        // ============================================================
+
+        const form        = document.getElementById('loginForm');
+        const input       = document.getElementById('secretCode');
+        const accessBtn   = document.getElementById('accessBtn');
+        const btnText     = document.getElementById('btnText');
+        const errorAlert  = document.getElementById('errorAlert');
+        const errorMsg    = document.getElementById('errorMsg');
+        const toggleEye   = document.getElementById('toggleEye');
+        const loginCard   = document.getElementById('loginCard');
+        const attemptInfo = document.getElementById('attemptInfo');
+        const lockRing    = document.getElementById('lockRing');
+        const successCheck = document.getElementById('successCheck');
+
+        let attempts = 0;
+        const MAX_ATTEMPTS = 5;
+        let isLocked = false;
+        let lockTimer = null;
+
+        // --- If already authenticated, redirect directly to admin ---
+        if (sessionStorage.getItem('adminToken')) {
+            window.location.replace('/admin');
+        }
+
+        // --- Toggle show/hide password ---
+        toggleEye.addEventListener('click', () => {
+            const isPassword = input.type === 'password';
+            input.type = isPassword ? 'text' : 'password';
+            toggleEye.textContent = isPassword ? '🙈' : '👁️';
+        });
+
+        // --- Focus the input on load ---
+        window.addEventListener('load', () => {
+            setTimeout(() => input.focus(), 400);
+        });
+
+        // --- Form submit ---
+        form.addEventListener('submit', async (e) => {
+            e.preventDefault();
+
+            if (isLocked) return;
+
+            const code = input.value.trim();
+            if (!code) {
+                showError('Please enter the secret code.');
+                shake();
+                return;
+            }
+
+            setLoading(true);
+            hideError();
+
+            try {
+                const response = await fetch('/verify-admin', {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({ code })
+                });
+
+                const result = await response.json();
+
+                if (response.ok && result.success) {
+                    // ✅ SUCCESS — store token and redirect
+                    sessionStorage.setItem('adminToken', result.token);
+                    sessionStorage.setItem('adminGranted', Date.now());
+                    showSuccessAndRedirect();
+                } else {
+                    // ❌ WRONG CODE
+                    attempts++;
+                    handleFailedAttempt(result.message || 'Invalid secret code. Access denied.');
+                }
+
+            } catch (err) {
+                console.error('Login error:', err);
+                showError('Cannot connect to server. Make sure the backend is running.');
+                shake();
+                setLoading(false);
+            }
+        });
+
+        // ============================================================
+        // HANDLE FAILED ATTEMPT — rate limiting with lockout
+        // ============================================================
+        function handleFailedAttempt(message) {
+            setLoading(false);
+            shake();
+            input.value = '';
+
+            if (attempts >= MAX_ATTEMPTS) {
+                // Lock out for 30 seconds
+                isLocked = true;
+                let countdown = 30;
+                showError(`Too many failed attempts. Try again in ${countdown}s.`);
+                accessBtn.disabled = true;
+                input.disabled = true;
+
+                lockTimer = setInterval(() => {
+                    countdown--;
+                    showError(`Too many failed attempts. Try again in ${countdown}s.`);
+                    if (countdown <= 0) {
+                        clearInterval(lockTimer);
+                        isLocked = false;
+                        attempts = 0;
+                        accessBtn.disabled = false;
+                        input.disabled = false;
+                        input.focus();
+                        hideError();
+                        attemptInfo.textContent = '';
+                        btnText.textContent = '🔓 Unlock Admin Panel';
+                    }
+                }, 1000);
+            } else {
+                const remaining = MAX_ATTEMPTS - attempts;
+                showError(message);
+                attemptInfo.innerHTML = `<span>${remaining}</span> attempt${remaining !== 1 ? 's' : ''} remaining`;
+                input.focus();
+            }
+        }
+
+        // ============================================================
+        // SHOW SUCCESS AND REDIRECT
+        // ============================================================
+        function showSuccessAndRedirect() {
+            // Swap lock for success check
+            lockRing.style.display = 'none';
+            successCheck.style.display = 'block';
+            form.style.display = 'none';
+            hideError();
+
+            const title = document.querySelector('.card-title');
+            const subtitle = document.querySelector('.card-subtitle');
+            title.textContent = 'Access Granted!';
+            title.style.cssText = 'background: linear-gradient(135deg, #43e97b, #38f9d7); -webkit-background-clip: text; -webkit-text-fill-color: transparent; background-clip: text; text-align: center; font-size: 1.6rem; font-weight: 700;';
+            subtitle.textContent = 'Redirecting to admin panel...';
+
+            attemptInfo.innerHTML = '';
+
+            setTimeout(() => {
+                window.location.href = '/admin';
+            }, 1200);
+        }
+
+        // ============================================================
+        // HELPERS
+        // ============================================================
+        function setLoading(loading) {
+            accessBtn.disabled = loading;
+            btnText.textContent = loading ? 'Verifying...' : '🔓 Unlock Admin Panel';
+        }
+
+        function showError(msg) {
+            errorMsg.textContent = msg;
+            errorAlert.classList.add('show');
+        }
+
+        function hideError() {
+            errorAlert.classList.remove('show');
+        }
+
+        function shake() {
+            loginCard.classList.remove('shake');
+            void loginCard.offsetWidth; // force reflow
+            loginCard.classList.add('shake');
+        }
+
+        // Clear shake class after animation
+        loginCard.addEventListener('animationend', (e) => {
+            if (e.animationName === 'shakeCard') {
+                loginCard.classList.remove('shake');
+            }
+        });
+
+        // Press Enter anywhere to submit
+        document.addEventListener('keydown', (e) => {
+            if (e.key === 'Enter' && !isLocked) {
+                form.requestSubmit();
+            }
+        });
+    </script>
+</body>
+</html>
